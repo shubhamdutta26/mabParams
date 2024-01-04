@@ -11,7 +11,5 @@ check_input <- function (one_letter_input) {
   if (sum(indexes) >= 1) {
     x <- stringr::str_flatten_comma(split_aa[indexes == TRUE])
     stop(paste0("Input contains :", x, "; Only one letter amino acid codes should be in the input without spaces."), call. = FALSE)
-  } else {
-    return("Great")
   }
 }

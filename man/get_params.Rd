@@ -4,10 +4,14 @@
 \alias{get_params}
 \title{XXX}
 \usage{
-get_params(seq)
+get_params(hc_seq, hc_cyclized, hc_clipped)
 }
 \arguments{
-\item{seq}{A string with amino acids}
+\item{hc_seq}{A string with hc amino acids}
+
+\item{hc_cyclized}{Boolean}
+
+\item{hc_clipped}{Boolean}
 }
 \value{
 vector
