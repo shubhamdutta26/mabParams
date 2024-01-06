@@ -1,6 +1,8 @@
 # Create named vector for amino acids
 aa_one_letter <- c("A", "R", "N", "D", "C", "Q", "E", "G", "H", "I",
                    "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V")
+
+# Check validity of HC/LC input
 check_input <- function (one_letter_input) {
   if (typeof (one_letter_input) != "character" || length(one_letter_input) != 1) {
     stop("This needs to be a character vector of length 1", call. = FALSE)
@@ -18,10 +20,11 @@ check_input <- function (one_letter_input) {
 
 # Create named vector for amino acids
 aa_named <- c(A = "ala", R = "arg", N = "asn", D = "asp", C = "cys",
-              Q = "glu", E = "gln", G = "gly", H = "his", I = "ile",
+              Q = "gln", E = "glu", G = "gly", H = "his", I = "ile",
               L = "leu", K = "lys", M = "met", F = "phe", P = "pro",
               S = "ser", T = "thr", W = "trp", Y = "tyr", V = "val")
 
+# Convert HC and LC to three letter codes
 to_aa_three_letter <- function (one_letter_input) {
   one_letter_input %>%
     stringr::str_split(pattern = "", simplify = TRUE) %>%
@@ -50,7 +53,7 @@ get_seq_element_comp <- function (seq) {
     "arg",6,12,4,1,0,
     "asn",4,6,2,2,0,
     "asp",4,5,1,3,0,
-    "cys",3,5,1,1,1,
+    "cys",3,5,1,1,1, # reduced with SH
     "glu",5,7,1,3,0,
     "gln",5,8,2,2,0,
     "gly",2,3,1,1,0,
@@ -77,25 +80,6 @@ get_seq_element_comp <- function (seq) {
     dplyr::filter(element_composition$molecule %in% seq)
 }
 
-element_mass <- tibble::tribble(
-  ~element,~symbol,~mass,
-  "bromine","Br",79.904,
-  "calcium","Ca",39.9625912,
-  "carbon","C",12.0107359,
-  "chlorine","Cl",35.4527,
-  "fluorine","F",18.9984,
-  "hydrogen","H",1.00794075,
-  "iodine","I",126.90447,
-  "lithium","Li",6.941,
-  "nitrogen","N",14.00670321,
-  "oxygen","O",15.99940492,
-  "phosphorus","P",30.97376,
-  "potassium","K",39.0983,
-  "selenium","Se",78.96,
-  "sodium","Na",22.98977,
-  "sulphur","S",32.06478741,
-)
-
 element_mass_list <- list(
   bromine=79.904,
   calcium=39.9625912,
@@ -114,9 +98,10 @@ element_mass_list <- list(
   sulphur=32.06478741
 )
 
-calculate_mass <- function (data, n, counts, mass, each_mass) {
-  data %>%
-    dplyr::mutate(dplyr::across(2:(ncol(data)-1), ~.x*n)) %>%
+calculate_mass <- function (df, n) {
+  # df$n = 1
+  df %>%
+    dplyr::mutate(dplyr::across(2:(ncol(df)-1), ~.x*n)) %>%
     dplyr::select(-n) %>%
     dplyr::mutate(dplyr::across(dplyr::any_of(names(element_mass_list)),
                                 ~.x * element_mass_list[[dplyr::cur_column()]])) %>%
@@ -124,4 +109,35 @@ calculate_mass <- function (data, n, counts, mass, each_mass) {
     dplyr::mutate(sum_each_mol = sum(dplyr::c_across(dplyr::where(is.numeric)))) %>%
     dplyr::pull("sum_each_mol") %>%
     sum()
+}
+
+# Cyclization and clipping check and calculations of HC MW
+# nh3_parse <- parse_chem_formula("NH3")
+# nh3_mass <- calculate_mass(nh3_parse, n=1)
+# nh3_mass <- 17.03053
+# h2o_parse <- parse_chem_formula("H2O")
+# h2o_mass <- calculate_mass(h2o_parse, n=1)
+# h2o_mass = 18.01529
+# lys <- get_seq_element_comp("lys")
+# lys_mass <- calculate_mass(lys, n=1)
+# lys_mass = 128.1725
+cyc_cli <- function (mass, hc_cyclized, hc_clipped, first_aa) {
+  if (hc_cyclized == TRUE & hc_clipped == TRUE) {
+    if (first_aa == "gln") {
+      adj_mass <- mass - 17.03053 - 128.1725
+    } else {
+      adj_mass <- mass - 18.01529 - 128.1725
+    }
+  } else if (hc_cyclized == TRUE & hc_clipped == FALSE) {
+    if (first_aa == "gln") {
+      adj_mass <- mass - 17.03053
+    } else {
+      adj_mass <- mass - 18.01529
+    }
+  } else if (hc_cyclized == FALSE & hc_clipped == TRUE) {
+    adj_mass <- mass - 128.1725
+  } else {
+    adj_mass <- mass
+  }
+  return(adj_mass)
 }

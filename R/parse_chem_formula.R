@@ -1,5 +1,26 @@
-parse_chem_formula_to_df <- function(formula) {
+element_symbol <- c(
+  bromine = "Br",
+  calcium = "Ca",
+  carbon = "C",
+  chlorine = "Cl",
+  fluorine = "F",
+  hydrogen = "H",
+  iodine = "I",
+  lithium = "Li",
+  nitrogen = "N",
+  oxygen = "O",
+  phosphorus = "P",
+  potassium = "K",
+  selenium = "Se",
+  sodium = "Na",
+  sulphur = "S"
+)
 
+parse_chem_formula <- function(formula,
+                               element = "element",
+                               count = "count",
+                               total_count = "total_count") {
+  #formula <- "NH3"
   if (stringr::str_detect(formula, pattern = " ") == TRUE ||
       stringr::str_detect(formula, pattern = "[$&+,:;=?@#|'<>.^*()%!-]") == TRUE) {
     stop("Cannot have spaces or special characters, Only A-Z, a-z, and 0-9 allowed")
@@ -46,12 +67,13 @@ parse_chem_formula_to_df <- function(formula) {
   }
 
   # Create a dataframe from the vectors
-  df <- tibble::tibble(element = symbols, count = counts) %>%
-    dplyr::group_by("element") %>%
-    dplyr::summarise(total_count = sum("count")) %>%
+  df <- tibble::tibble(!!element := symbols, !!count := counts) %>%
+    dplyr::group_by(element) %>%
+    dplyr::summarise(!!total_count := sum(count)) %>%
     dplyr::ungroup() %>%
-    tidyr::pivot_wider(names_from = "element", values_from = "total_count") %>%
-    dplyr::mutate(molecule = formula, .before = 1)
+    tidyr::pivot_wider(names_from = element, values_from = total_count) %>%
+    dplyr::mutate(molecule = formula, .before = 1) %>%
+    dplyr::rename(dplyr::any_of(element_symbol))
 
   # Return the dataframe
   return(df)

@@ -1,15 +1,16 @@
 Package: mabParams
-Title: What the Package Does (One Line, Title Case)
+Title: Calculate Mass for Antibody based Therapeutic Applications
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
+    person("Shubham", "Dutta", , "shubhamdutta26@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
 Imports:
     tidyr,
     dplyr,
     stringr,
-    tibble
+    tibble,
+    rlang
 Depends:
   magrittr
 License: MIT + file LICENSE
