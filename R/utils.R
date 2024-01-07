@@ -49,6 +49,7 @@ get_seq_element_comp <- function (seq) {
     "oxygen",0,0,0,1,0,
     "sulphur",0,0,0,0,1,
     "water",0,2,0,1,0,
+    "nh3",0,3,1,0,0,
     "ala",3,5,1,1,0,
     "arg",6,12,4,1,0,
     "asn",4,6,2,2,0,
@@ -98,17 +99,13 @@ element_mass_list <- list(
   sulphur=32.06478741
 )
 
-calculate_mass <- function (df, n) {
-  # df$n = 1
+calculate_mass <- function (df) {
   df %>%
-    dplyr::mutate(dplyr::across(2:(ncol(df)-1), ~.x*n)) %>%
-    dplyr::select(-n) %>%
     dplyr::mutate(dplyr::across(dplyr::any_of(names(element_mass_list)),
-                                ~.x * element_mass_list[[dplyr::cur_column()]])) %>%
+    ~.x * element_mass_list[[dplyr::cur_column()]])) %>%
     dplyr::rowwise() %>%
-    dplyr::mutate(sum_each_mol = sum(dplyr::c_across(dplyr::where(is.numeric)))) %>%
-    dplyr::pull("sum_each_mol") %>%
-    sum()
+    dplyr::mutate(mass_full = sum(dplyr::c_across(dplyr::where(is.numeric)))) %>%
+    dplyr::pull("mass_full")
 }
 
 # Cyclization and clipping check and calculations of HC MW
