@@ -4,6 +4,7 @@
 #' @param lc_seq A string with lc amino acids
 #' @param hc_cyclized A boolean
 #' @param hc_clipped A boolean
+#' @param lc_glycosylation A boolean
 #' @param n_disulphides Number of total disulphides
 #' @param n_hc_disulphides Number of total HC disulphides
 #' @param n_lc_disulphides Number of total LC disulphides
@@ -16,53 +17,22 @@ mab_params <- function (hc_seq,
                         lc_seq,
                         hc_cyclized,
                         hc_clipped,
+                        lc_glycosylation,
                         n_disulphides = 16L,
                         n_hc_disulphides = 4L,
                         n_lc_disulphides = 2L,
                         mab = "mab1") {
-                       #lc_glycosylation = FALSE) {
 
-  # Dataframes------------------------------------------------------------------
-  # n = "n"
-  # molecule = "molecule"
-  element_composition <- tibble::tribble(
-    ~molecule,~carbon,~hydrogen,~nitrogen,~oxygen,~sulphur,
-    "carbon",1,0,0,0,0,
-    "hydrogen",0,1,0,0,0,
-    "nitrogen",0,0,1,0,0,
-    "oxygen",0,0,0,1,0,
-    "sulphur",0,0,0,0,1,
-    "water",0,2,0,1,0,
-    "nh3",0,3,1,0,0,
-    "ala",3,5,1,1,0,
-    "arg",6,12,4,1,0,
-    "asn",4,6,2,2,0,
-    "asp",4,5,1,3,0,
-    "cys",3,5,1,1,1, # reduced with SH
-    "glu",5,7,1,3,0,
-    "gln",5,8,2,2,0,
-    "gly",2,3,1,1,0,
-    "his",6,7,3,1,0,
-    "ile",6,11,1,1,0,
-    "leu",6,11,1,1,0,
-    "lys",6,12,2,1,0,
-    "met",5,9,1,1,1,
-    "phe",9,9,1,1,0,
-    "pro",5,7,1,1,0,
-    "ser",3,5,1,2,0,
-    "thr",4,7,1,2,0,
-    "trp",11,10,2,1,0,
-    "tyr",9,9,1,2,0,
-    "val",5,9,1,1,0,
-    "HexNAc",8,13,1,5,0,
-    "Hex",6,10,0,5,0,
-    "dHex",6,10,0,4,0,
-    "NeuAc",11,17,1,8,0,
-    "NeuGc",11,17,1,9,0,
-  )
+  # Read data-------------------------------------------------------------------
+  element_composition <- readr::read_csv("inst/extdata/element_composition.csv",
+                                         col_types = "ciiiii",
+                                         col_names = TRUE)
+  glycans <- readr::read_csv("inst/extdata/glycans.csv",
+                             col_types = "ciiiiicc",
+                             col_names = TRUE)
   # HC Mass calculation---------------------------------------------------------
-  # hc_seq = "QVTLKESGPGILQPSQTLSLTCSFSGFSLRTSGMGVGWIRQPSGKGLEWLAHIWWDDDKRYNPALKSRLTISKDTSSNQVFLKIASVDTADTATYYCAQINPAWFAYWGQGTLVTVSSASTKGPSVFPLAPSSRSTSESTAALGCLVKDYFPEPVTVSWNSGSLTSGVHTFPAVLQSSGLYSLSSVVTVPSSSLGTQTYVCNVNHKPSNTKVDKRVEIKTCGGGSKPPTCPPCPAPELLGGPSVFLFPPKPKDTLMISRTPEVTCVVVDVSQEDPDVKFNWYVNGAEVHHAQTKPRETQYNSTYRVVSVLTVTHQDWLNGKEYTCKVSNKALPAPIQKTISKDKGQPREPQVYTLPPSREELTKNQVSLTCLVKGFYPSDIVVEWESSGQPENTYKTTPPVLDSDGSYFLYSKLTVDKSRWQQGNVFSCSVMHEALHNHYTQKSLSVSPGK"
-  # mab = "mab1"
+  #hc_seq = "QVTLKESGPGILQPSQTLSLTCSFSGFSLRTSGMGVGWIRQPSGKGLEWLAHIWWDDDKRYNPALKSRLTISKDTSSNQVFLKIASVDTADTATYYCAQINPAWFAYWGQGTLVTVSSASTKGPSVFPLAPSSRSTSESTAALGCLVKDYFPEPVTVSWNSGSLTSGVHTFPAVLQSSGLYSLSSVVTVPSSSLGTQTYVCNVNHKPSNTKVDKRVEIKTCGGGSKPPTCPPCPAPELLGGPSVFLFPPKPKDTLMISRTPEVTCVVVDVSQEDPDVKFNWYVNGAEVHHAQTKPRETQYNSTYRVVSVLTVTHQDWLNGKEYTCKVSNKALPAPIQKTISKDKGQPREPQVYTLPPSREELTKNQVSLTCLVKGFYPSDIVVEWESSGQPENTYKTTPPVLDSDGSYFLYSKLTVDKSRWQQGNVFSCSVMHEALHNHYTQKSLSVSPGK"
+  #mab = "mab1"
   check_input(hc_seq)
   hc_three <- to_aa_three_letter(hc_seq)
   hc_base <- c(hc_three, "water")
@@ -88,8 +58,8 @@ mab_params <- function (hc_seq,
   # Cyclization and clipping calculations of HC full reduced MW-----------------
   hc_first_aa <- hc_three[1]
   hc_last_aa <- hc_three[length(hc_three)]
-  # hc_cyclized = TRUE
-  # hc_clipped = TRUE
+  hc_cyclized = TRUE
+  hc_clipped = TRUE
 
   if (hc_cyclized == TRUE & hc_clipped == TRUE) {
     if (hc_first_aa == "gln") {
@@ -246,14 +216,53 @@ mab_params <- function (hc_seq,
     dplyr::mutate(antibody = mab, chain = "heavy", reduction = "partial",
                   modifications = "No", glycans = "No", .before = 1)
 
+  # Add glycoforms to total reduced hc mass-------------------------------
+  hc_glycan_tbl <- glycans %>%
+    dplyr::filter(Show_HC == "Y") %>%
+    dplyr::select(-c(Show_HC, Show_LC)) %>%
+    tidyr::pivot_longer(-glycan_name,
+                        names_to = "molecule",
+                        values_to = "n")
 
+  hc_glycan_individual <- split(hc_glycan_tbl , f = hc_glycan_tbl$glycan_name)
 
-  # # Calculations for partially reduced HC
-  # hc_mass_reduced_partial <- hc_mass_reduced_full - (n_hc_disulphides * (2 * 1.00794075))
-  # adj_hc_reduced_partial <- cyc_cli(hc_mass_reduced_partial, hc_cyclized, hc_clipped, hc_first_aa)
+  hc_glycan_full <- hc_glycan_individual %>%
+    purrr::map(dplyr::select, -1) %>%
+    purrr::map(dplyr::left_join, element_composition, by = "molecule") %>%
+    purrr::map(dplyr::relocate, n, .after = dplyr::last_col()) %>%
+    purrr::map(dplyr::bind_rows, cli_cyc_tbl) %>%
+    purrr::map(dplyr::mutate_if, is.numeric, ~.x*n) %>%
+    purrr::map(dplyr::select, -dplyr::last_col()) %>%
+    purrr::map(dplyr::select, 2:dplyr::last_col()) %>%
+    purrr::map(dplyr::summarise_all, ~ sum(.x, na.rm = TRUE))
+
+  hc_glycan_full_calculation <- dplyr::bind_rows(hc_glycan_full) %>%
+    dplyr::mutate(glycans = names(hc_glycan_full), .before = 1) %>%
+    dplyr::mutate(mass = calculate_mass(.),
+                  cyclyzation = ifelse(hc_cyclized == TRUE, "Yes", "No"),
+                  clipping = ifelse(hc_clipped == TRUE, "Yes", "No"),
+                  antibody = mab, chain = "heavy", reduction = "full",
+                  modifications = "No")
+
+  hc_glycan_partial <- hc_glycan_individual %>%
+    purrr::map(dplyr::select, -1) %>%
+    purrr::map(dplyr::left_join, element_composition, by = "molecule") %>%
+    purrr::map(dplyr::relocate, n, .after = dplyr::last_col()) %>%
+    purrr::map(dplyr::bind_rows, partial_red_tbl) %>%
+    purrr::map(dplyr::mutate_if, is.numeric, ~.x*n) %>%
+    purrr::map(dplyr::select, -dplyr::last_col()) %>%
+    purrr::map(dplyr::select, 2:dplyr::last_col()) %>%
+    purrr::map(dplyr::summarise_all, ~ sum(.x, na.rm = TRUE))
+
+  hc_glycan_partial_calculation <- dplyr::bind_rows(hc_glycan_partial) %>%
+    dplyr::mutate(glycans = names(hc_glycan_partial), .before = 1) %>%
+    dplyr::mutate(mass = calculate_mass(.),
+                  cyclyzation = ifelse(hc_cyclized == TRUE, "Yes", "No"),
+                  clipping = ifelse(hc_clipped == TRUE, "Yes", "No"),
+                  antibody = mab, chain = "heavy", reduction = "partial",
+                  modifications = "No")
 
   # Add user provided chem mod for HC
-  # Add these glycoforms to total reduced hc mass
 
   # LC Mass calculation---------------------------------------------------------
   # lc_seq = "DIVLTQSPASLAVSLGQRATISCKASQSVDFDGDSFMNWYQQKPGQPPKLLIYTTSNLESGIPARFSASGSGTDFTLNIHPVEEEDTATYYCQQSNEDPYTFGGGTKLELKRAVAAPSVFIFPPSEDQVKSGTVSVVCLLNNFYPREASVKWKVDGVLKTGNSQESVTEQDSKDNTYSLSSTLTLSSTDYQSHNVYACEVTHQGLSSPVTKSFNRGEC"
@@ -297,7 +306,65 @@ mab_params <- function (hc_seq,
     dplyr::mutate(antibody = mab, chain = "light", reduction = "partial",
                   modifications = "No", glycans = "No", .before = 1)
 
+  # Add glycoforms to total reduced lc mass-------------------------------------
+  if (lc_glycosylation == T) {
+    lc_glycan_tbl <- glycans %>%
+      dplyr::filter(Show_LC == "Y") %>%
+      dplyr::select(-c(Show_HC, Show_LC)) %>%
+      tidyr::pivot_longer(-glycan_name,
+                          names_to = "molecule",
+                          values_to = "n")
+
+    lc_glycan_individual <- split(lc_glycan_tbl , f = lc_glycan_tbl$glycan_name)
+
+    lc_glycan_full <- lc_glycan_individual %>%
+      purrr::map(dplyr::select, -1) %>%
+      purrr::map(dplyr::left_join, element_composition, by = "molecule") %>%
+      purrr::map(dplyr::relocate, n, .after = dplyr::last_col()) %>%
+      purrr::map(dplyr::bind_rows, lc_elements_tibble) %>%
+      purrr::map(dplyr::mutate_if, is.numeric, ~.x*n) %>%
+      purrr::map(dplyr::select, -dplyr::last_col()) %>%
+      purrr::map(dplyr::select, 2:dplyr::last_col()) %>%
+      purrr::map(dplyr::summarise_all, ~ sum(.x, na.rm = TRUE))
+
+    lc_glycan_full_calculation <- dplyr::bind_rows(lc_glycan_full) %>%
+      dplyr::mutate(glycans = names(lc_glycan_full), .before = 1) %>%
+      dplyr::mutate(mass = calculate_mass(.),
+                    cyclyzation =NA,
+                    clipping = NA,
+                    antibody = mab, chain = "light", reduction = "full",
+                    modifications = "No")
+
+    lc_glycan_partial <- lc_glycan_individual %>%
+      purrr::map(dplyr::select, -1) %>%
+      purrr::map(dplyr::left_join, element_composition, by = "molecule") %>%
+      purrr::map(dplyr::relocate, n, .after = dplyr::last_col()) %>%
+      purrr::map(dplyr::bind_rows, partial_red_tbl_lc) %>%
+      purrr::map(dplyr::mutate_if, is.numeric, ~.x*n) %>%
+      purrr::map(dplyr::select, -dplyr::last_col()) %>%
+      purrr::map(dplyr::select, 2:dplyr::last_col()) %>%
+      purrr::map(dplyr::summarise_all, ~ sum(.x, na.rm = TRUE))
+
+    lc_glycan_partial_calculation <- dplyr::bind_rows(lc_glycan_partial) %>%
+      dplyr::mutate(glycans = names(lc_glycan_partial), .before = 1) %>%
+      dplyr::mutate(mass = calculate_mass(.),
+                    cyclyzation =NA,
+                    clipping = NA,
+                    antibody = mab, chain = "light", reduction = "partial",
+                    modifications = "No")
+  } else {
+    lc_glycan_full_calculation <- NULL
+    lc_glycan_partial_calculation <- NULL
+  }
+
   # Add user provided chem mod for LC
-  # Add these glycoforms to total reduced lc mass
-  return(dplyr::bind_rows(hc_mab_full_reduced, hc_mab_partial_reduced, lc_mab_full_reduced, lc_mab_partial_reduced))
+
+  return(dplyr::bind_rows(hc_mab_full_reduced,
+                          hc_glycan_full_calculation,
+                          hc_mab_partial_reduced,
+                          hc_glycan_partial_calculation,
+                          lc_mab_full_reduced,
+                          lc_glycan_full_calculation,
+                          lc_mab_partial_reduced,
+                          lc_glycan_partial_calculation))
 }

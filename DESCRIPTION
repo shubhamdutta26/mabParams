@@ -6,10 +6,12 @@ Authors@R:
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
 Imports:
+    readr,
     tidyr,
     dplyr,
     stringr,
     tibble,
+    purrr,
     rlang
 Depends:
   magrittr

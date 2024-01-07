@@ -9,6 +9,7 @@ mab_params(
   lc_seq,
   hc_cyclized,
   hc_clipped,
+  lc_glycosylation,
   n_disulphides = 16L,
   n_hc_disulphides = 4L,
   n_lc_disulphides = 2L,
@@ -23,6 +24,8 @@ mab_params(
 \item{hc_cyclized}{A boolean}
 
 \item{hc_clipped}{A boolean}
+
+\item{lc_glycosylation}{A boolean}
 
 \item{n_disulphides}{Number of total disulphides}
 
