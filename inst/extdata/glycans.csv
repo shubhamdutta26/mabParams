@@ -1,5 +1,5 @@
-glycan_name,HexNAc,Hex,dHex,NeuAc,NeuGc,Show_HC,Show_LC
-Chitobiose core,2,0,0,0,0,Y,N
+glycan_name,HexNAc,Hex,dHex,NeuAc,NeuGc,show_hc,show_lc
+Chitobiose core,2,0,0,0,0,Y,Y
 G0,4,3,0,0,0,N,N
 G0F,4,3,1,0,0,Y,N
 G1,4,4,0,0,0,N,N

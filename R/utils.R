@@ -99,7 +99,7 @@ element_mass_list <- list(
   sulphur=32.06478741
 )
 
-calculate_mass <- function (df) {
+calculate_mass_from_elements_tbl <- function (df) {
   df %>%
     dplyr::mutate(dplyr::across(dplyr::any_of(names(element_mass_list)),
     ~.x * element_mass_list[[dplyr::cur_column()]])) %>%

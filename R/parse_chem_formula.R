@@ -1,80 +1,23 @@
-element_symbol <- c(
-  bromine = "Br",
-  calcium = "Ca",
-  carbon = "C",
-  chlorine = "Cl",
-  fluorine = "F",
-  hydrogen = "H",
-  iodine = "I",
-  lithium = "Li",
-  nitrogen = "N",
-  oxygen = "O",
-  phosphorus = "P",
-  potassium = "K",
-  selenium = "Se",
-  sodium = "Na",
-  sulphur = "S"
-)
+#' Converts chemical formula into a tibble with names and element counts. Only
+#' works for crtain elements. Add more elements if needed in the named vector
+#' inside the function
+#'
+#' @param formula A character vector og length 1 (e.g. C2H5OH for ethanol)
+#'
+#' @return A tibble/ dataframe
+#' @export
+#'
+#' @examples
+parse_chem_formula <- function(formula) {
+  # Use regular expression to match element symbols and their counts
+  matches <- strsplit(formula, "(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)", perl=TRUE)[[1]]
 
-parse_chem_formula <- function(formula,
-                               element = "element",
-                               count = "count",
-                               total_count = "total_count") {
-  #formula <- "NH3"
-  if (stringr::str_detect(formula, pattern = " ") == TRUE ||
-      stringr::str_detect(formula, pattern = "[$&+,:;=?@#|'<>.^*()%!-]") == TRUE) {
-    stop("Cannot have spaces or special characters, Only A-Z, a-z, and 0-9 allowed")
-  }
-  # Split the formula into individual characters
-  chars <- stringr::str_split(formula, "", simplify = TRUE)
+  # Initialize vectors to store elements and counts
+  elements <- matches[seq(1, length(matches), by=2)]
+  counts <- as.numeric(matches[seq(2, length(matches), by=2)])
 
-  # Initialize vectors to store the elements and their counts
-  symbols <- c()
-  counts <- c()
+  # Construct dataframe
+  df <- tibble::tibble(element = elements, count = counts)
 
-  # Initialize a variable to store the current element
-  current_element <- ""
-
-  # Loop over each character in the formula
-  for (i in 1:length(chars)) {
-    # If the character is an uppercase letter, it's the start of a new element
-    if (grepl("[A-Z]", chars[i])) {
-      # If there's a current element, add it to the symbols vector with a count of 1
-      if (current_element != "") {
-        symbols <- c(symbols, current_element)
-        counts <- c(counts, 1)
-      }
-
-      # Set the current element to the new element
-      current_element <- chars[i]
-    } else if (grepl("[a-z]", chars[i])) {
-      # If the character is a lowercase letter, it's part of the current element
-      current_element <- paste0(current_element, chars[i])
-    } else if (grepl("[0-9]", chars[i])) {
-      # If the character is a number, it's the count of the current element
-      symbols <- c(symbols, current_element)
-      counts <- c(counts, as.integer(chars[i]))
-
-      # Reset the current element
-      current_element <- ""
-    }
-  }
-
-  # If there's a current element at the end of the formula, add it to the symbols vector with a count of 1
-  if (current_element != "") {
-    symbols <- c(symbols, current_element)
-    counts <- c(counts, 1)
-  }
-
-  # Create a dataframe from the vectors
-  df <- tibble::tibble(!!element := symbols, !!count := counts) %>%
-    dplyr::group_by(element) %>%
-    dplyr::summarise(!!total_count := sum(count)) %>%
-    dplyr::ungroup() %>%
-    tidyr::pivot_wider(names_from = element, values_from = total_count) %>%
-    dplyr::mutate(molecule = formula, .before = 1) %>%
-    dplyr::rename(dplyr::any_of(element_symbol))
-
-  # Return the dataframe
   return(df)
 }

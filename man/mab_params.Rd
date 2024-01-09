@@ -2,7 +2,7 @@
 % Please edit documentation in R/mab_params.R
 \name{mab_params}
 \alias{mab_params}
-\title{XXX}
+\title{Calculate mass parameters of monoclonal antibodies}
 \usage{
 mab_params(
   hc_seq,
@@ -10,6 +10,8 @@ mab_params(
   hc_cyclized,
   hc_clipped,
   lc_glycosylation,
+  hc_chem_mod = NA,
+  lc_chem_mod = NA,
   n_disulphides = 16L,
   n_hc_disulphides = 4L,
   n_lc_disulphides = 2L,
@@ -27,6 +29,10 @@ mab_params(
 
 \item{lc_glycosylation}{A boolean}
 
+\item{hc_chem_mod}{A string}
+
+\item{lc_chem_mod}{A string}
+
 \item{n_disulphides}{Number of total disulphides}
 
 \item{n_hc_disulphides}{Number of total HC disulphides}
@@ -39,5 +45,5 @@ mab_params(
 vector
 }
 \description{
-XXX
+Calculate mass parameters of monoclonal antibodies
 }
