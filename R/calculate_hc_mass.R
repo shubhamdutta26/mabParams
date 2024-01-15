@@ -7,6 +7,7 @@ calculate_hc_mass <- function (seq,
   # seq = "QVTLKESGPGILQPSQTLSLTCSFSGFSLRTSGMGVGWIRQPSGKGLEWLAHIWWDDDKRYNPALKSRLTISKDTSSNQVFLKIASVDTADTATYYCAQINPAWFAYWGQGTLVTVSSASTKGPSVFPLAPSSRSTSESTAALGCLVKDYFPEPVTVSWNSGSLTSGVHTFPAVLQSSGLYSLSSVVTVPSSSLGTQTYVCNVNHKPSNTKVDKRVEIKTCGGGSKPPTCPPCPAPELLGGPSVFLFPPKPKDTLMISRTPEVTCVVVDVSQEDPDVKFNWYVNGAEVHHAQTKPRETQYNSTYRVVSVLTVTHQDWLNGKEYTCKVSNKALPAPIQKTISKDKGQPREPQVYTLPPSREELTKNQVSLTCLVKGFYPSDIVVEWESSGQPENTYKTTPPVLDSDGSYFLYSKLTVDKSRWQQGNVFSCSVMHEALHNHYTQKSLSVSPGK"
   # mab = "mab1"
   # chem_mod = "C39H67N5O7"
+  # n_hc_disulphides = 4L
 
   # Read data-------------------------------------------------------------------
   element_composition <- readr::read_csv("inst/extdata/element_composition.csv",
@@ -15,11 +16,9 @@ calculate_hc_mass <- function (seq,
   glycans <- readr::read_csv("inst/extdata/glycans.csv",
                              col_types = "ciiiiicc",
                              col_names = TRUE)
-  element_symbol <- c(bromine = "Br", calcium = "Ca", carbon = "C",
-                      chlorine = "Cl", fluorine = "F", hydrogen = "H",
-                      iodine = "I", lithium = "Li", nitrogen = "N",
-                      oxygen = "O", phosphorus = "P", potassium = "K",
-                      selenium = "Se", sodium = "Na", sulphur = "S")
+  element_symbol <- readr::read_csv("inst/extdata/element_symbols.csv",
+                             col_types = "cc",
+                             col_names = TRUE)
 
   # Check sequence and generate tibble with atomic composition------------------
   check_input(seq)
@@ -33,9 +32,11 @@ calculate_hc_mass <- function (seq,
   # Check mods------------------------------------------------------------------
   if (!is.na(chem_mod)) {
     parsed_chem_tbl <- parse_chem_formula(chem_mod) %>%
+      dplyr::left_join(element_symbol, by = c("element" = "symbol")) %>%
+      dplyr::select(-element) %>%
+      dplyr::rename(element = element.y) %>%
       tidyr::pivot_wider(names_from = element, values_from = count) %>%
-      dplyr::mutate(molecule = chem_mod, n = 1L) %>%
-      dplyr::rename(dplyr::any_of(element_symbol))
+      dplyr::mutate(molecule = chem_mod, n = 1L)
   } else {
     parsed_chem_tbl <- NULL
   }

@@ -2,11 +2,12 @@ test_that("check_input throws error if not type character or illegal character",
   expect_error(check_input(1), "This needs to be a character vector of length 1")
   expect_error(check_input(TRUE), "This needs to be a character vector of length 1")
   expect_error(check_input(c("MRGM", "MGRM")), "This needs to be a character vector of length 1")
-  expect_error(check_input("MRXM"), "Input contains :X; Only one letter amino acid codes should be in the input without spaces.")
-  expect_error(check_input("MRX M"), "Input contains :X,  ; Only one letter amino acid codes should be in the input without spaces.")
+  expect_error(check_input("MRXM"), "Input contains:X; Only one letter amino acid codes should be in the input without spaces.")
+  expect_error(check_input("MRX M"), "Input contains:X,  ; Only one letter amino acid codes should be in the input without spaces.")
+  expect_error(check_input("MR}X M"), "Input contains:}, X,  ; Only one letter amino acid codes should be in the input without spaces.")
 })
 
-test_that("to_aa_three_letter returns a character vector of input string (upper or lower case)", {
+test_that("to_aa_three_letter returns a character vector of input string upper or lower case)", {
   expect_identical(to_aa_three_letter("MRGMGGC"), c("met", "arg", "gly", "met", "gly", "gly", "cys"))
   expect_identical(to_aa_three_letter("MrGMggC"), c("met", "arg", "gly", "met", "gly", "gly", "cys"))
 })

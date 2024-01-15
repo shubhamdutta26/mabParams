@@ -17,9 +17,9 @@
 #' @examples
 mab_params <- function (hc_seq,
                         lc_seq,
-                        hc_cyclized,
-                        hc_clipped,
-                        lc_glycosylation,
+                        hc_cyclized = F,
+                        hc_clipped = F,
+                        lc_glycosylation = F,
                         hc_chem_mod = NA,
                         lc_chem_mod = NA,
                         n_disulphides = 16L,
@@ -80,8 +80,67 @@ mab_params <- function (hc_seq,
                   modifications = paste(hc_chem_mod, lc_chem_mod, sep = "; "),
                   glycans = "No", .before = 1)
 
+  # INTACT MASS WITH GLYCOFORMS-------------------------------------------------
+  element_composition <- readr::read_csv("inst/extdata/element_composition.csv",
+                                         col_types = "ciiiii",
+                                         col_names = TRUE)
+
+  glycans_1 <- readr::read_csv("inst/extdata/glycans.csv",
+                             col_types = "ciiiiicc",
+                             col_names = TRUE)
+  hc <- glycans_1 %>%
+    dplyr::filter(show_hc == "Y") %>%
+    dplyr::select(-c(show_hc, show_lc))
+
+  lc <- glycans_1 %>%
+    dplyr::filter(show_lc == "Y") %>%
+    dplyr::select(-c(show_hc, show_lc))
+
+  combinations <- combine_and_sum(hc, lc, names(hc)[1], names(hc)[-1], "_hc", "_lc") %>%
+    dplyr::mutate(hc_lc_modifications = paste0(glycan_name_hc, " + ", glycan_name_hc,
+                                               " + ", glycan_name_lc, " + ",
+                                               glycan_name_lc, sep = ""), .before = 1) %>%
+    dplyr::select(hc_lc_modifications, dplyr::starts_with("sum_")) %>%
+    dplyr::mutate(n = 2) %>%
+    dplyr::mutate(dplyr::across(2:(ncol(.)-1), ~.x*n)) %>%
+    select(-n) %>%
+    dplyr::rename_with(~gsub("sum_", "", .x, fixed = TRUE)) %>%
+    tidyr::pivot_longer(-hc_lc_modifications,
+                        names_to = "molecule",
+                        values_to = "n")
+
+  split_combinations <- split(combinations, f = combinations$hc_lc_modifications)
+
+  combinations_full <- split_combinations %>%
+    purrr::map(dplyr::select, -1) %>%
+    purrr::map(dplyr::left_join, element_composition, by = "molecule") %>%
+    purrr::map(dplyr::relocate, n, .after = dplyr::last_col()) %>%
+    # purrr::map(dplyr::bind_rows, cli_cyc_tbl, lc_mod_elements_tibble) %>%
+    purrr::map(dplyr::mutate_if, is.numeric, ~.x*n) %>%
+    purrr::map(dplyr::select, -dplyr::last_col()) %>%
+    purrr::map(dplyr::select, 2:dplyr::last_col()) %>%
+    purrr::map(dplyr::summarise_all, ~ sum(.x, na.rm = TRUE)) %>%
+    purrr::map(tidyr::pivot_longer, dplyr::everything(), names_to = "elements", values_to = "glycans")
+
+  intact_mass_glyco <- combinations_full %>%
+    purrr::map(dplyr::full_join, hc_count_tbl, by = "elements") %>%
+    purrr::map(dplyr::full_join, lc_count_tbl, by = "elements") %>%
+    purrr::map(dplyr::full_join, n_hydrogen, by = "elements") %>%
+    # purrr::map(dplyr::rowwise) %>%
+    purrr::map(~dplyr::mutate(., total_sum = rowSums(.[,2:5], na.rm = TRUE))) %>%
+    purrr::map(dplyr::select, c(elements, total_sum)) %>%
+    purrr::map(tidyr::pivot_wider, names_from = elements, values_from = total_sum)
+
+  final_glyco_intact <- dplyr::bind_rows(intact_mass_glyco) %>%
+    dplyr::mutate(glycans = names(intact_mass_glyco), .before = 1) %>%
+    dplyr::mutate(mass = calculate_mass_from_elements_tbl(.),
+                  {{col_name_cyclized}} := ifelse(hc_cyclized == TRUE, "Yes", "No"),
+                  clipping = ifelse(hc_clipped == TRUE, "Yes", "No")) %>%
+    dplyr::mutate(antibody = mab, chain = NA, reduction = "intact",
+                  modifications = paste(hc_chem_mod, lc_chem_mod, sep = "; "),
+                  .before = 1)
 
 
-
-  return(dplyr::bind_rows(intact_mass, hc_mass_params[[1]],lc_mass_params[[1]]))
+  # RETURN TIBBLE
+  return(dplyr::bind_rows(intact_mass, final_glyco_intact, hc_mass_params[[1]],lc_mass_params[[1]]))
 }

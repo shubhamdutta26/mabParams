@@ -4,6 +4,7 @@ aa_one_letter <- c("A", "R", "N", "D", "C", "Q", "E", "G", "H", "I",
 
 # Check validity of HC/LC input
 check_input <- function (one_letter_input) {
+
   if (typeof (one_letter_input) != "character" || length(one_letter_input) != 1) {
     stop("This needs to be a character vector of length 1", call. = FALSE)
   }
@@ -11,10 +12,11 @@ check_input <- function (one_letter_input) {
     stringr::str_split(pattern = "", simplify = TRUE) %>%
     as.character() %>%
     toupper()
+
   indexes = !(split_aa %in% aa_one_letter)
   if (sum(indexes) >= 1) {
     x <- stringr::str_flatten_comma(split_aa[indexes == TRUE])
-    stop(paste0("Input contains :", x, "; Only one letter amino acid codes should be in the input without spaces."), call. = FALSE)
+    stop(paste0("Input contains:", x, "; Only one letter amino acid codes should be in the input without spaces."), call. = FALSE)
   }
 }
 
@@ -108,33 +110,24 @@ calculate_mass_from_elements_tbl <- function (df) {
     dplyr::pull("mass_full")
 }
 
-# Cyclization and clipping check and calculations of HC MW
-# nh3_parse <- parse_chem_formula("NH3")
-# nh3_mass <- calculate_mass(nh3_parse, n=1)
-# nh3_mass <- 17.03053
-# h2o_parse <- parse_chem_formula("H2O")
-# h2o_mass <- calculate_mass(h2o_parse, n=1)
-# h2o_mass = 18.01529
-# lys <- get_seq_element_comp("lys")
-# lys_mass <- calculate_mass(lys, n=1)
-# lys_mass = 128.1725
-cyc_cli <- function (mass, hc_cyclized, hc_clipped, first_aa) {
-  if (hc_cyclized == TRUE & hc_clipped == TRUE) {
-    if (first_aa == "gln") {
-      adj_mass <- mass - 17.03053 - 128.1725
-    } else {
-      adj_mass <- mass - 18.01529 - 128.1725
-    }
-  } else if (hc_cyclized == TRUE & hc_clipped == FALSE) {
-    if (first_aa == "gln") {
-      adj_mass <- mass - 17.03053
-    } else {
-      adj_mass <- mass - 18.01529
-    }
-  } else if (hc_cyclized == FALSE & hc_clipped == TRUE) {
-    adj_mass <- mass - 128.1725
-  } else {
-    adj_mass <- mass
+combine_and_sum <- function(df1, df2, char_col, num_cols, suffix_1, suffix_2) {
+  # Create all combinations of the 'char' column
+  comb <- expand.grid(df1[[char_col]], df2[[char_col]])
+
+  # Name the columns
+  names(comb) <- c(paste0(char_col, suffix_1), paste0(char_col, suffix_2))
+
+  # Loop over the numeric columns
+  for (num_col in num_cols) {
+    # Add the corresponding numeric columns from df1
+    comb[[paste0(num_col, suffix_1)]] <- df1[[num_col]][match(comb[[paste0(char_col, suffix_1)]], df1[[char_col]])]
+
+    # Add the corresponding numeric columns from df2
+    comb[[paste0(num_col, suffix_2)]] <- df2[[num_col]][match(comb[[paste0(char_col, suffix_2)]], df2[[char_col]])]
+
+    # Add the numeric columns
+    comb[[paste0("sum_", num_col)]] <- comb[[paste0(num_col, suffix_1)]] + comb[[paste0(num_col, suffix_2)]]
   }
-  return(adj_mass)
+
+  return(comb)
 }
