@@ -1,0 +1,42 @@
+"antibody","chain","reduction","modifications","glycans","carbon","hydrogen","nitrogen","oxygen","sulphur","mass","PyroQ","clipping"
+"mab1",NA,"intact","NA; NA","No",6468,9978,1710,2046,40,145711.50905652,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","Chitobiose core + Chitobiose core + Chitobiose core + Chitobiose core",6532,10082,1718,2086,40,147337.0518146,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","Chitobiose core + Chitobiose core + G2 + G2",6624,10234,1722,2156,40,149771.23166864,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","Chitobiose core + Chitobiose core + G2S1 (NGNA) + G2S1 (NGNA)",6646,10268,1724,2174,40,150385.74053892,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","G0+GlcNAc + G0+GlcNAc + Chitobiose core + Chitobiose core",6616,10220,1724,2146,40,149529.05396816,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","G0+GlcNAc + G0+GlcNAc + G2 + G2",6708,10372,1728,2216,40,151963.2338222,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","G0+GlcNAc + G0+GlcNAc + G2S1 (NGNA) + G2S1 (NGNA)",6730,10406,1730,2234,40,152577.74269248,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","G0F + G0F + Chitobiose core + Chitobiose core",6612,10214,1722,2144,40,149414.9511638,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","G0F + G0F + G2 + G2",6704,10366,1726,2214,40,151849.13101784,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","G0F + G0F + G2S1 (NGNA) + G2S1 (NGNA)",6726,10400,1728,2232,40,152463.63988812,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","G0F-GlcNAc + G0F-GlcNAc + Chitobiose core + Chitobiose core",6596,10188,1720,2134,40,149008.56547428,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","G0F-GlcNAc + G0F-GlcNAc + G2 + G2",6688,10340,1724,2204,40,151442.74532832,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","G0F-GlcNAc + G0F-GlcNAc + G2S1 (NGNA) + G2S1 (NGNA)",6710,10374,1726,2222,40,152057.2541986,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","G1+GlcNAc + G1+GlcNAc + Chitobiose core + Chitobiose core",6628,10240,1724,2156,40,149853.33566316,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","G1+GlcNAc + G1+GlcNAc + G2 + G2",6720,10392,1728,2226,40,152287.5155172,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","G1+GlcNAc + G1+GlcNAc + G2S1 (NGNA) + G2S1 (NGNA)",6742,10426,1730,2244,40,152902.02438748,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","G1F + G1F + Chitobiose core + Chitobiose core",6624,10234,1722,2154,40,149739.2328588,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","G1F + G1F + G2 + G2",6716,10386,1726,2224,40,152173.41271284,"Yes","Yes"
+"mab1",NA,"intact","NA; NA","G1F + G1F + G2S1 (NGNA) + G2S1 (NGNA)",6738,10420,1728,2242,40,152787.92158312,"Yes","Yes"
+"mab1","heavy","full",NA,"No",2196,3402,580,675,14,49176.98367444,"Yes","Yes"
+"mab1","heavy","full",NA,"Chitobiose core",2212,3428,582,685,14,49583.36936396,"Yes","Yes"
+"mab1","heavy","full",NA,"G0+GlcNAc",2254,3497,585,715,14,50679.37044074,"Yes","Yes"
+"mab1","heavy","full",NA,"G0F",2252,3494,584,714,14,50622.31903856,"Yes","Yes"
+"mab1","heavy","full",NA,"G0F-GlcNAc",2244,3481,583,709,14,50419.1261938,"Yes","Yes"
+"mab1","heavy","full",NA,"G1+GlcNAc",2260,3507,585,720,14,50841.51128824,"Yes","Yes"
+"mab1","heavy","full",NA,"G1F",2258,3504,584,719,14,50784.45988606,"Yes","Yes"
+"mab1","heavy","partial",NA,"No",2196,3394,580,675,14,49168.92014844,"Yes","Yes"
+"mab1","heavy","partial",NA,"Chitobiose core",2212,3420,582,685,14,49575.30583796,"Yes","Yes"
+"mab1","heavy","partial",NA,"G0+GlcNAc",2254,3489,585,715,14,50671.30691474,"Yes","Yes"
+"mab1","heavy","partial",NA,"G0F",2252,3486,584,714,14,50614.25551256,"Yes","Yes"
+"mab1","heavy","partial",NA,"G0F-GlcNAc",2244,3473,583,709,14,50411.0626678,"Yes","Yes"
+"mab1","heavy","partial",NA,"G1+GlcNAc",2260,3499,585,720,14,50833.44776224,"Yes","Yes"
+"mab1","heavy","partial",NA,"G1F",2258,3496,584,719,14,50776.39636006,"Yes","Yes"
+"mab1","light","full",NA,"No",1038,1603,275,348,6,23694.89790582,NA,NA
+"mab1","light","full",NA,"Chitobiose core",1054,1629,277,358,6,24101.28359534,NA,NA
+"mab1","light","full",NA,"G2",1100,1705,279,393,6,25318.37352236,NA,NA
+"mab1","light","full",NA,"G2S1 (NGNA)",1111,1722,280,402,6,25625.6279575,NA,NA
+"mab1","light","partial",NA,"No",1038,1599,275,348,6,23690.86614282,NA,NA
+"mab1","light","partial",NA,"Chitobiose core",1054,1625,277,358,6,24097.25183234,NA,NA
+"mab1","light","partial",NA,"G2",1100,1701,279,393,6,25314.34175936,NA,NA
+"mab1","light","partial",NA,"G2S1 (NGNA)",1111,1718,280,402,6,25621.5961945,NA,NA

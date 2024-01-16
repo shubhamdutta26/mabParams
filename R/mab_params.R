@@ -103,7 +103,7 @@ mab_params <- function (hc_seq,
     dplyr::select(hc_lc_modifications, dplyr::starts_with("sum_")) %>%
     dplyr::mutate(n = 2) %>%
     dplyr::mutate(dplyr::across(2:(ncol(.)-1), ~.x*n)) %>%
-    select(-n) %>%
+    dplyr::select(-n) %>%
     dplyr::rename_with(~gsub("sum_", "", .x, fixed = TRUE)) %>%
     tidyr::pivot_longer(-hc_lc_modifications,
                         names_to = "molecule",
