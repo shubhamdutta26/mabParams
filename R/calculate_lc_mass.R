@@ -1,5 +1,5 @@
 calculate_lc_mass <- function (seq,
-                               glycosylation,
+                               glycosylation = FALSE,
                                chem_mod = NA,
                                n_lc_disulphides = 2L,
                                mab) {

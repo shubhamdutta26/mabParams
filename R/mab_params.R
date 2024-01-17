@@ -17,9 +17,9 @@
 #' @examples
 mab_params <- function (hc_seq,
                         lc_seq,
-                        hc_cyclized = F,
-                        hc_clipped = F,
-                        lc_glycosylation = F,
+                        hc_cyclized = FALSE,
+                        hc_clipped = FALSE,
+                        lc_glycosylation = FALSE,
                         hc_chem_mod = NA,
                         lc_chem_mod = NA,
                         n_disulphides = 16L,
@@ -92,16 +92,24 @@ mab_params <- function (hc_seq,
     dplyr::filter(show_hc == "Y") %>%
     dplyr::select(-c(show_hc, show_lc))
 
-  lc <- glycans_1 %>%
+
+  lc_1 <- glycans_1 %>%
     dplyr::filter(show_lc == "Y") %>%
     dplyr::select(-c(show_hc, show_lc))
+
+  if (lc_glycosylation) {
+    lc <- lc_1
+  } else {
+    lc <- lc_1 %>%
+      dplyr::mutate(glycan_name = NA, HexNAc = 0, Hex = 0, dHex = 0, NeuAc = 0, NeuGc = 0)
+  }
 
   combinations <- combine_and_sum(hc, lc, names(hc)[1], names(hc)[-1], "_hc", "_lc") %>%
     dplyr::mutate(hc_lc_modifications = paste0(glycan_name_hc, " + ", glycan_name_hc,
                                                " + ", glycan_name_lc, " + ",
                                                glycan_name_lc, sep = ""), .before = 1) %>%
     dplyr::select(hc_lc_modifications, dplyr::starts_with("sum_")) %>%
-    dplyr::mutate(n = 2) %>%
+    dplyr::mutate(n = ifelse(lc_glycosylation == FALSE, 1, 2)) %>%
     dplyr::mutate(dplyr::across(2:(ncol(.)-1), ~.x*n)) %>%
     dplyr::select(-n) %>%
     dplyr::rename_with(~gsub("sum_", "", .x, fixed = TRUE)) %>%

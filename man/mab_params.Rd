@@ -7,9 +7,9 @@
 mab_params(
   hc_seq,
   lc_seq,
-  hc_cyclized = F,
-  hc_clipped = F,
-  lc_glycosylation = F,
+  hc_cyclized = FALSE,
+  hc_clipped = FALSE,
+  lc_glycosylation = FALSE,
   hc_chem_mod = NA,
   lc_chem_mod = NA,
   n_disulphides = 16L,

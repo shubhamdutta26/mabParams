@@ -1,6 +1,6 @@
 calculate_hc_mass <- function (seq,
-                               cyclized,
-                               clipped,
+                               cyclized = FALSE,
+                               clipped = FALSE,
                                chem_mod = NA,
                                n_hc_disulphides = 4L,
                                mab) {
