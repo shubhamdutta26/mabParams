@@ -1,0 +1,34 @@
+﻿antibody,chain,reduction,modifications,glycans,mass,PyroQ,clipping
+mab1,NA,intact,C39H67N5O7; NA,No,147147,Yes,Yes
+mab1,NA,intact,C39H67N5O7; NA,Chitobiose core + Chitobiose core + G2 + G2,151207,Yes,Yes
+mab1,NA,intact,C39H67N5O7; NA,Chitobiose core + Chitobiose core + G2S1 (NGNA) + G2S1 (NGNA),151822,Yes,Yes
+mab1,NA,intact,C39H67N5O7; NA,G0+GlcNAc + G0+GlcNAc + G2 + G2,153399,Yes,Yes
+mab1,NA,intact,C39H67N5O7; NA,G0+GlcNAc + G0+GlcNAc + G2S1 (NGNA) + G2S1 (NGNA),154014,Yes,Yes
+mab1,NA,intact,C39H67N5O7; NA,G0F + G0F + G2 + G2,153285,Yes,Yes
+mab1,NA,intact,C39H67N5O7; NA,G0F + G0F + G2S1 (NGNA) + G2S1 (NGNA),153900,Yes,Yes
+mab1,NA,intact,C39H67N5O7; NA,G0F-GlcNAc + G0F-GlcNAc + G2 + G2,152879,Yes,Yes
+mab1,NA,intact,C39H67N5O7; NA,G0F-GlcNAc + G0F-GlcNAc + G2S1 (NGNA) + G2S1 (NGNA),153493,Yes,Yes
+mab1,NA,intact,C39H67N5O7; NA,G1+GlcNAc + G1+GlcNAc + G2 + G2,153723,Yes,Yes
+mab1,NA,intact,C39H67N5O7; NA,G1+GlcNAc + G1+GlcNAc + G2S1 (NGNA) + G2S1 (NGNA),154338,Yes,Yes
+mab1,NA,intact,C39H67N5O7; NA,G1F + G1F + G2 + G2,153609,Yes,Yes
+mab1,NA,intact,C39H67N5O7; NA,G1F + G1F + G2S1 (NGNA) + G2S1 (NGNA),154224,Yes,Yes
+mab1,heavy,full,C39H67N5O7,No,49895,Yes,Yes
+mab1,heavy,full,C39H67N5O7,Chitobiose core,50301,Yes,Yes
+mab1,heavy,full,C39H67N5O7,G0+GlcNAc,51397,Yes,Yes
+mab1,heavy,full,C39H67N5O7,G0F,51340,Yes,Yes
+mab1,heavy,full,C39H67N5O7,G0F-GlcNAc,51137,Yes,Yes
+mab1,heavy,full,C39H67N5O7,G1+GlcNAc,51559,Yes,Yes
+mab1,heavy,full,C39H67N5O7,G1F,51502,Yes,Yes
+mab1,heavy,partial,C39H67N5O7,No,49887,Yes,Yes
+mab1,heavy,partial,C39H67N5O7,Chitobiose core,50293,Yes,Yes
+mab1,heavy,partial,C39H67N5O7,G0+GlcNAc,51389,Yes,Yes
+mab1,heavy,partial,C39H67N5O7,G0F,51332,Yes,Yes
+mab1,heavy,partial,C39H67N5O7,G0F-GlcNAc,51129,Yes,Yes
+mab1,heavy,partial,C39H67N5O7,G1+GlcNAc,51551,Yes,Yes
+mab1,heavy,partial,C39H67N5O7,G1F,51494,Yes,Yes
+mab1,light,full,NA,No,23695,NA,NA
+mab1,light,full,NA,G2,25318,NA,NA
+mab1,light,full,NA,G2S1 (NGNA),25626,NA,NA
+mab1,light,partial,NA,No,23691,NA,NA
+mab1,light,partial,NA,G2,25314,NA,NA
+mab1,light,partial,NA,G2S1 (NGNA),25622,NA,NA

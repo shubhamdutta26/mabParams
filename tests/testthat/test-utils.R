@@ -1,11 +1,17 @@
 test_that("check_input throws error if not type character or illegal character", {
-  expect_error(check_input(1), "This needs to be a character vector of length 1")
-  expect_error(check_input(TRUE), "This needs to be a character vector of length 1")
-  expect_error(check_input(c("MRGM", "MGRM")), "This needs to be a character vector of length 1")
+  expect_error(check_input(1), "HC/ LC sequence input needs to be a character vector of length 1")
+  expect_error(check_input(TRUE), "HC/ LC sequence input needs to be a character vector of length 1")
+  expect_error(check_input(c("MRGM", "MGRM")), "HC/ LC sequence input needs to be a character vector of length 1")
   expect_error(check_input("MRXM"), "Input contains:X; Only one letter amino acid codes should be in the input without spaces.")
   expect_error(check_input("MRX M"), "Input contains:X,  ; Only one letter amino acid codes should be in the input without spaces.")
   expect_error(check_input("MR}X M"), "Input contains:}, X,  ; Only one letter amino acid codes should be in the input without spaces.")
 })
+
+# test_that("check_boolean_args throws error if not type character or illegal character", {
+#   expect_error(check_boolean_args(1,1,1), "hc_cyclized, hc_clipped, lc_glycosylation arguments must be logical.")
+#   expect_error(check_boolean_args("1","1","1"), "hc_cyclized, hc_clipped, lc_glycosylation arguments must be logical.")
+# })
+
 
 test_that("to_aa_three_letter returns a character vector of input string upper or lower case)", {
   expect_identical(to_aa_three_letter("MRGMGGC"), c("met", "arg", "gly", "met", "gly", "gly", "cys"))

@@ -3,8 +3,11 @@ Title: Calculate Mass for Antibody based Therapeutic Applications
 Version: 0.0.0.9000
 Authors@R: 
     person("Shubham", "Dutta", , "shubhamdutta26@gmail.com", role = c("aut", "cre", "cph"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           comment = c(ORCID = "0000-0001-8484-0717"))
+Description: A mass calculator that facilitates the straightforward determination
+        of average or monoisotopic masses and elemental compositions for therapeutic 
+        glycoproteins, such as monoclonal antibodies (mAb), bispecific antibodies (bsAb), 
+        and antibody-drug conjugates (ADC).
 Imports:
     readr,
     tidyr,
@@ -14,7 +17,8 @@ Imports:
     purrr,
     rlang
 Depends:
-  magrittr
+    magrittr,
+    R (>= 2.10)
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

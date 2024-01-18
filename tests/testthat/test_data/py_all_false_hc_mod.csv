@@ -1,0 +1,24 @@
+﻿antibody,chain,reduction,modifications,glycans,mass,cyclized,clipping
+mab1,NA,intact,C39H67N5O7; NA,No,147438,No,No
+mab1,NA,intact,C39H67N5O7; NA,Chitobiose core + Chitobiose core + NA + NA,148251,No,No
+mab1,NA,intact,C39H67N5O7; NA,G0+GlcNAc + G0+GlcNAc + NA + NA,150443,No,No
+mab1,NA,intact,C39H67N5O7; NA,G0F + G0F + NA + NA,150329,No,No
+mab1,NA,intact,C39H67N5O7; NA,G0F-GlcNAc + G0F-GlcNAc + NA + NA,149922,No,No
+mab1,NA,intact,C39H67N5O7; NA,G1+GlcNAc + G1+GlcNAc + NA + NA,150767,No,No
+mab1,NA,intact,C39H67N5O7; NA,G1F + G1F + NA + NA,150653,No,No
+mab1,heavy,full,C39H67N5O7,No,50040,No,No
+mab1,heavy,full,C39H67N5O7,Chitobiose core,50447,No,No
+mab1,heavy,full,C39H67N5O7,G0+GlcNAc,51543,No,No
+mab1,heavy,full,C39H67N5O7,G0F,51486,No,No
+mab1,heavy,full,C39H67N5O7,G0F-GlcNAc,51282,No,No
+mab1,heavy,full,C39H67N5O7,G1+GlcNAc,51705,No,No
+mab1,heavy,full,C39H67N5O7,G1F,51648,No,No
+mab1,heavy,partial,C39H67N5O7,No,50032,No,No
+mab1,heavy,partial,C39H67N5O7,Chitobiose core,50438,No,No
+mab1,heavy,partial,C39H67N5O7,G0+GlcNAc,51534,No,No
+mab1,heavy,partial,C39H67N5O7,G0F,51477,No,No
+mab1,heavy,partial,C39H67N5O7,G0F-GlcNAc,51274,No,No
+mab1,heavy,partial,C39H67N5O7,G1+GlcNAc,51697,No,No
+mab1,heavy,partial,C39H67N5O7,G1F,51640,No,No
+mab1,light,full,NA,No,23695,NA,NA
+mab1,light,partial,NA,No,23691,NA,NA

@@ -1,31 +1,31 @@
 test_that("parse_chem_formula returns error if first character is a number", {
   formula <- "1H23N2OS"
-  expect_error(parse_chem_formula(formula), "The formula cannot begin with a number or contain special characters")
+  expect_error(parse_chem_formula(formula), "The formula cannot begin with a number or contain special characters.")
 })
 
 test_that("parse_chem_formula returns error if any spaces in formula", {
   formula <- "1H23 N2OS"
-  expect_error(parse_chem_formula(formula), "The formula cannot begin with a number or contain special characters")
+  expect_error(parse_chem_formula(formula), "The formula cannot begin with a number or contain special characters.")
 })
 
 test_that("parse_chem_formula returns error if any special chars in formula", {
   formula <- "1H23(N2OS)2"
-  expect_error(parse_chem_formula(formula), "The formula cannot begin with a number or contain special characters")
+  expect_error(parse_chem_formula(formula), "The formula cannot begin with a number or contain special characters.")
 })
 
 test_that("parse_chem_formula returns error if any special chars in formula - 2", {
   formula <- "1H23*N2OS2"
-  expect_error(parse_chem_formula(formula), "The formula cannot begin with a number or contain special characters")
+  expect_error(parse_chem_formula(formula), "The formula cannot begin with a number or contain special characters.")
 })
 
 test_that("parse_chem_formula returns error if any special chars in formula - 3", {
   formula <- "1H23N2OS2/"
-  expect_error(parse_chem_formula(formula), "The formula cannot begin with a number or contain special characters")
+  expect_error(parse_chem_formula(formula), "The formula cannot begin with a number or contain special characters.")
 })
 
 test_that("parse_chem_formula returns error if any special chars in formula - 4", {
   formula <- "$1H23N2OS2"
-  expect_error(parse_chem_formula(formula), "The formula cannot begin with a number or contain special characters")
+  expect_error(parse_chem_formula(formula), "The formula cannot begin with a number or contain special characters.")
 })
 
 test_that("parse_chem_formula returns the correct element composition", {

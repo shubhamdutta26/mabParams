@@ -1,7 +1,7 @@
 test_that("calculate_mass throws error if not type character or illegal character", {
-  expect_error(calculate_mass(1), "This needs to be a character vector of length 1")
-  expect_error(calculate_mass(TRUE), "This needs to be a character vector of length 1")
-  expect_error(calculate_mass(c("MRGM", "MGRM")), "This needs to be a character vector of length 1")
+  expect_error(calculate_mass(1), "HC/ LC sequence input needs to be a character vector of length 1")
+  expect_error(calculate_mass(TRUE), "HC/ LC sequence input needs to be a character vector of length 1")
+  expect_error(calculate_mass(c("MRGM", "MGRM")), "HC/ LC sequence input needs to be a character vector of length 1")
   expect_error(calculate_mass("MRXM"), "Input contains:X; Only one letter amino acid codes should be in the input without spaces.")
   expect_error(calculate_mass("MRX M"), "Input contains:X,  ; Only one letter amino acid codes should be in the input without spaces.")
   expect_error(calculate_mass("MR}X M"), "Input contains:}, X,  ; Only one letter amino acid codes should be in the input without spaces.")

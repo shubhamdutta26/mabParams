@@ -1,0 +1,34 @@
+﻿antibody,chain,reduction,modifications,glycans,mass,PyroQ,clipping
+mab1,NA,intact,NA; C39H67N5O7,No,147147,Yes,Yes
+mab1,NA,intact,NA; C39H67N5O7,Chitobiose core + Chitobiose core + G2 + G2,151207,Yes,Yes
+mab1,NA,intact,NA; C39H67N5O7,Chitobiose core + Chitobiose core + G2S1 (NGNA) + G2S1 (NGNA),151822,Yes,Yes
+mab1,NA,intact,NA; C39H67N5O7,G0+GlcNAc + G0+GlcNAc + G2 + G2,153399,Yes,Yes
+mab1,NA,intact,NA; C39H67N5O7,G0+GlcNAc + G0+GlcNAc + G2S1 (NGNA) + G2S1 (NGNA),154014,Yes,Yes
+mab1,NA,intact,NA; C39H67N5O7,G0F + G0F + G2 + G2,153285,Yes,Yes
+mab1,NA,intact,NA; C39H67N5O7,G0F + G0F + G2S1 (NGNA) + G2S1 (NGNA),153900,Yes,Yes
+mab1,NA,intact,NA; C39H67N5O7,G0F-GlcNAc + G0F-GlcNAc + G2 + G2,152879,Yes,Yes
+mab1,NA,intact,NA; C39H67N5O7,G0F-GlcNAc + G0F-GlcNAc + G2S1 (NGNA) + G2S1 (NGNA),153493,Yes,Yes
+mab1,NA,intact,NA; C39H67N5O7,G1+GlcNAc + G1+GlcNAc + G2 + G2,153723,Yes,Yes
+mab1,NA,intact,NA; C39H67N5O7,G1+GlcNAc + G1+GlcNAc + G2S1 (NGNA) + G2S1 (NGNA),154338,Yes,Yes
+mab1,NA,intact,NA; C39H67N5O7,G1F + G1F + G2 + G2,153609,Yes,Yes
+mab1,NA,intact,NA; C39H67N5O7,G1F + G1F + G2S1 (NGNA) + G2S1 (NGNA),154224,Yes,Yes
+mab1,heavy,full,NA,No,49177,Yes,Yes
+mab1,heavy,full,NA,Chitobiose core,49583,Yes,Yes
+mab1,heavy,full,NA,G0+GlcNAc,50679,Yes,Yes
+mab1,heavy,full,NA,G0F,50622,Yes,Yes
+mab1,heavy,full,NA,G0F-GlcNAc,50419,Yes,Yes
+mab1,heavy,full,NA,G1+GlcNAc,50842,Yes,Yes
+mab1,heavy,full,NA,G1F,50784,Yes,Yes
+mab1,heavy,partial,NA,No,49169,Yes,Yes
+mab1,heavy,partial,NA,Chitobiose core,49575,Yes,Yes
+mab1,heavy,partial,NA,G0+GlcNAc,50671,Yes,Yes
+mab1,heavy,partial,NA,G0F,50614,Yes,Yes
+mab1,heavy,partial,NA,G0F-GlcNAc,50411,Yes,Yes
+mab1,heavy,partial,NA,G1+GlcNAc,50833,Yes,Yes
+mab1,heavy,partial,NA,G1F,50776,Yes,Yes
+mab1,light,full,C39H67N5O7,No,24413,NA,NA
+mab1,light,full,C39H67N5O7,G2,26036,NA,NA
+mab1,light,full,C39H67N5O7,G2S1 (NGNA),26344,NA,NA
+mab1,light,partial,C39H67N5O7,No,24409,NA,NA
+mab1,light,partial,C39H67N5O7,G2,26032,NA,NA
+mab1,light,partial,C39H67N5O7,G2S1 (NGNA),26340,NA,NA

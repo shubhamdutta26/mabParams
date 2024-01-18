@@ -1,0 +1,24 @@
+﻿antibody,chain,reduction,modifications,glycans,mass,cyclized,clipping
+aCD16,NA,intact,NA; NA,No,146002,No,No
+aCD16,NA,intact,NA; NA,Chitobiose core + Chitobiose core + NA + NA,146815,No,No
+aCD16,NA,intact,NA; NA,G0+GlcNAc + G0+GlcNAc + NA + NA,149007,No,No
+aCD16,NA,intact,NA; NA,G0F + G0F + NA + NA,148893,No,No
+aCD16,NA,intact,NA; NA,G0F-GlcNAc + G0F-GlcNAc + NA + NA,148486,No,No
+aCD16,NA,intact,NA; NA,G1+GlcNAc + G1+GlcNAc + NA + NA,149331,No,No
+aCD16,NA,intact,NA; NA,G1F + G1F + NA + NA,149217,No,No
+aCD16,heavy,full,NA,No,49322,No,No
+aCD16,heavy,full,NA,Chitobiose core,49729,No,No
+aCD16,heavy,full,NA,G0+GlcNAc,50825,No,No
+aCD16,heavy,full,NA,G0F,50768,No,No
+aCD16,heavy,full,NA,G0F-GlcNAc,50564,No,No
+aCD16,heavy,full,NA,G1+GlcNAc,50987,No,No
+aCD16,heavy,full,NA,G1F,50930,No,No
+aCD16,heavy,partial,NA,No,49314,No,No
+aCD16,heavy,partial,NA,Chitobiose core,49721,No,No
+aCD16,heavy,partial,NA,G0+GlcNAc,50817,No,No
+aCD16,heavy,partial,NA,G0F,50759,No,No
+aCD16,heavy,partial,NA,G0F-GlcNAc,50556,No,No
+aCD16,heavy,partial,NA,G1+GlcNAc,50979,No,No
+aCD16,heavy,partial,NA,G1F,50922,No,No
+aCD16,light,full,NA,No,23695,NA,NA
+aCD16,light,partial,NA,No,23691,NA,NA

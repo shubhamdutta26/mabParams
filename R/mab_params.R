@@ -27,6 +27,9 @@ mab_params <- function (hc_seq,
                         n_lc_disulphides = 2L,
                         mab = "mab1") {
 
+  # Check chemical mod arg
+  check_chem_mod_args(hc_chem_mod, lc_chem_mod)
+
   # HC MASS CALCULATION---------------------------------------------------------
   hc_mass_params <- calculate_hc_mass(hc_seq, hc_cyclized, hc_clipped,
                                       hc_chem_mod, n_hc_disulphides, mab)

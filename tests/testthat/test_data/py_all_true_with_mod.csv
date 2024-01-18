@@ -1,0 +1,34 @@
+﻿antibody,chain,reduction,modifications,glycans,mass,PyroQ,clipping
+mab1,NA,intact,C39H67N5O7; C39H67N5O7,No,148583,Yes,Yes
+mab1,NA,intact,C39H67N5O7; C39H67N5O7,Chitobiose core + Chitobiose core + G2 + G2,152643,Yes,Yes
+mab1,NA,intact,C39H67N5O7; C39H67N5O7,Chitobiose core + Chitobiose core + G2S1 (NGNA) + G2S1 (NGNA),153258,Yes,Yes
+mab1,NA,intact,C39H67N5O7; C39H67N5O7,G0+GlcNAc + G0+GlcNAc + G2 + G2,154835,Yes,Yes
+mab1,NA,intact,C39H67N5O7; C39H67N5O7,G0+GlcNAc + G0+GlcNAc + G2S1 (NGNA) + G2S1 (NGNA),155450,Yes,Yes
+mab1,NA,intact,C39H67N5O7; C39H67N5O7,G0F + G0F + G2 + G2,154721,Yes,Yes
+mab1,NA,intact,C39H67N5O7; C39H67N5O7,G0F + G0F + G2S1 (NGNA) + G2S1 (NGNA),155336,Yes,Yes
+mab1,NA,intact,C39H67N5O7; C39H67N5O7,G0F-GlcNAc + G0F-GlcNAc + G2 + G2,154315,Yes,Yes
+mab1,NA,intact,C39H67N5O7; C39H67N5O7,G0F-GlcNAc + G0F-GlcNAc + G2S1 (NGNA) + G2S1 (NGNA),154929,Yes,Yes
+mab1,NA,intact,C39H67N5O7; C39H67N5O7,G1+GlcNAc + G1+GlcNAc + G2 + G2,155159,Yes,Yes
+mab1,NA,intact,C39H67N5O7; C39H67N5O7,G1+GlcNAc + G1+GlcNAc + G2S1 (NGNA) + G2S1 (NGNA),155774,Yes,Yes
+mab1,NA,intact,C39H67N5O7; C39H67N5O7,G1F + G1F + G2 + G2,155045,Yes,Yes
+mab1,NA,intact,C39H67N5O7; C39H67N5O7,G1F + G1F + G2S1 (NGNA) + G2S1 (NGNA),155660,Yes,Yes
+mab1,heavy,full,C39H67N5O7,No,49895,Yes,Yes
+mab1,heavy,full,C39H67N5O7,Chitobiose core,50301,Yes,Yes
+mab1,heavy,full,C39H67N5O7,G0+GlcNAc,51397,Yes,Yes
+mab1,heavy,full,C39H67N5O7,G0F,51340,Yes,Yes
+mab1,heavy,full,C39H67N5O7,G0F-GlcNAc,51137,Yes,Yes
+mab1,heavy,full,C39H67N5O7,G1+GlcNAc,51559,Yes,Yes
+mab1,heavy,full,C39H67N5O7,G1F,51502,Yes,Yes
+mab1,heavy,partial,C39H67N5O7,No,49887,Yes,Yes
+mab1,heavy,partial,C39H67N5O7,Chitobiose core,50293,Yes,Yes
+mab1,heavy,partial,C39H67N5O7,G0+GlcNAc,51389,Yes,Yes
+mab1,heavy,partial,C39H67N5O7,G0F,51332,Yes,Yes
+mab1,heavy,partial,C39H67N5O7,G0F-GlcNAc,51129,Yes,Yes
+mab1,heavy,partial,C39H67N5O7,G1+GlcNAc,51551,Yes,Yes
+mab1,heavy,partial,C39H67N5O7,G1F,51494,Yes,Yes
+mab1,light,full,C39H67N5O7,No,24413,NA,NA
+mab1,light,full,C39H67N5O7,G2,26036,NA,NA
+mab1,light,full,C39H67N5O7,G2S1 (NGNA),26344,NA,NA
+mab1,light,partial,C39H67N5O7,No,24409,NA,NA
+mab1,light,partial,C39H67N5O7,G2,26032,NA,NA
+mab1,light,partial,C39H67N5O7,G2S1 (NGNA),26340,NA,NA

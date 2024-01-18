@@ -6,7 +6,7 @@ aa_one_letter <- c("A", "R", "N", "D", "C", "Q", "E", "G", "H", "I",
 check_input <- function (one_letter_input) {
 
   if (typeof (one_letter_input) != "character" || length(one_letter_input) != 1) {
-    stop("This needs to be a character vector of length 1", call. = FALSE)
+    stop("HC/ LC sequence input needs to be a character vector of length 1", call. = FALSE)
   }
   split_aa <- one_letter_input %>%
     stringr::str_split(pattern = "", simplify = TRUE) %>%
@@ -17,6 +17,31 @@ check_input <- function (one_letter_input) {
   if (sum(indexes) >= 1) {
     x <- stringr::str_flatten_comma(split_aa[indexes == TRUE])
     stop(paste0("Input contains:", x, "; Only one letter amino acid codes should be in the input without spaces."), call. = FALSE)
+  }
+}
+
+check_boolean_args <- function(cyclized = NA, clipped = NA, lc_glyco = NA) {
+  if (typeof(cyclized) != "logical" || typeof(clipped) != "logical" || typeof(lc_glyco) != "logical") {
+    stop(paste0("hc_cyclized, hc_clipped, lc_glycosylation arguments must be logical."))
+  }
+}
+
+check_chem_mod_args <- function(hc_chem_mod = NA, lc_chem_mod = NA) {
+  if (!is.na(hc_chem_mod)) {
+    if (typeof(hc_chem_mod) != "character" || length(hc_chem_mod) > 1) {
+      stop("The chemical modifications needs to be a character vector of length 1.", call. = FALSE)
+    }
+    if (grepl("^[0-9]$", substr(hc_chem_mod, 1, 1)) == TRUE || grepl("[^a-zA-Z0-9]", hc_chem_mod) == TRUE ) {
+      stop("The chemical modifications cannot begin with a number or contain special characters.", call. = FALSE)
+    }
+  }
+  if (!is.na(lc_chem_mod)) {
+    if (typeof(lc_chem_mod) != "character" || length(lc_chem_mod) > 1) {
+      stop("The chemical modifications needs to be a character vector of length 1.", call. = FALSE)
+    }
+    if (grepl("^[0-9]$", substr(lc_chem_mod, 1, 1)) == TRUE || grepl("[^a-zA-Z0-9]", lc_chem_mod) == TRUE ) {
+      stop("The chemical modifications cannot begin with a number or contain special characters.", call. = FALSE)
+    }
   }
 }
 

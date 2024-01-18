@@ -25,6 +25,7 @@ calculate_hc_mass <- function (seq,
 
   # Check sequence and generate tibble with atomic composition------------------
   check_input(seq)
+  check_boolean_args(cyclized, clipped)
   hc_three <- to_aa_three_letter(seq)
   hc_base <- c(hc_three, "water")
   hc_base_count_table <- count_molecules(hc_base)

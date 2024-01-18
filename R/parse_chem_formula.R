@@ -14,7 +14,7 @@
 parse_chem_formula <- function(formula) {
   # Check if first character is a number or any special characters
   if (grepl("^[0-9]$", substr(formula, 1, 1)) == TRUE || grepl("[^a-zA-Z0-9]", formula) == TRUE ) {
-    stop("The formula cannot begin with a number or contain special characters", call. = FALSE)
+    stop("The formula cannot begin with a number or contain special characters.", call. = FALSE)
   }
   # Use regular expression to match element symbols and their counts
   matches <- regmatches(formula, gregexpr("[A-Z][a-z]?\\d*()", formula))[[1]]

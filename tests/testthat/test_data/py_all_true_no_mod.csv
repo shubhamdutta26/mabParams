@@ -1,0 +1,34 @@
+﻿antibody,chain,reduction,modifications,glycans,mass,PyroQ,clipping
+mab1,NA,intact,NA; NA,No,145712,Yes,Yes
+mab1,NA,intact,NA; NA,Chitobiose core + Chitobiose core + G2 + G2,149771,Yes,Yes
+mab1,NA,intact,NA; NA,Chitobiose core + Chitobiose core + G2S1 (NGNA) + G2S1 (NGNA),150386,Yes,Yes
+mab1,NA,intact,NA; NA,G0+GlcNAc + G0+GlcNAc + G2 + G2,151963,Yes,Yes
+mab1,NA,intact,NA; NA,G0+GlcNAc + G0+GlcNAc + G2S1 (NGNA) + G2S1 (NGNA),152578,Yes,Yes
+mab1,NA,intact,NA; NA,G0F + G0F + G2 + G2,151849,Yes,Yes
+mab1,NA,intact,NA; NA,G0F + G0F + G2S1 (NGNA) + G2S1 (NGNA),152464,Yes,Yes
+mab1,NA,intact,NA; NA,G0F-GlcNAc + G0F-GlcNAc + G2 + G2,151443,Yes,Yes
+mab1,NA,intact,NA; NA,G0F-GlcNAc + G0F-GlcNAc + G2S1 (NGNA) + G2S1 (NGNA),152057,Yes,Yes
+mab1,NA,intact,NA; NA,G1+GlcNAc + G1+GlcNAc + G2 + G2,152288,Yes,Yes
+mab1,NA,intact,NA; NA,G1+GlcNAc + G1+GlcNAc + G2S1 (NGNA) + G2S1 (NGNA),152902,Yes,Yes
+mab1,NA,intact,NA; NA,G1F + G1F + G2 + G2,152173,Yes,Yes
+mab1,NA,intact,NA; NA,G1F + G1F + G2S1 (NGNA) + G2S1 (NGNA),152788,Yes,Yes
+mab1,heavy,full,NA,No,49177,Yes,Yes
+mab1,heavy,full,NA,Chitobiose core,49583,Yes,Yes
+mab1,heavy,full,NA,G0+GlcNAc,50679,Yes,Yes
+mab1,heavy,full,NA,G0F,50622,Yes,Yes
+mab1,heavy,full,NA,G0F-GlcNAc,50419,Yes,Yes
+mab1,heavy,full,NA,G1+GlcNAc,50842,Yes,Yes
+mab1,heavy,full,NA,G1F,50784,Yes,Yes
+mab1,heavy,partial,NA,No,49169,Yes,Yes
+mab1,heavy,partial,NA,Chitobiose core,49575,Yes,Yes
+mab1,heavy,partial,NA,G0+GlcNAc,50671,Yes,Yes
+mab1,heavy,partial,NA,G0F,50614,Yes,Yes
+mab1,heavy,partial,NA,G0F-GlcNAc,50411,Yes,Yes
+mab1,heavy,partial,NA,G1+GlcNAc,50833,Yes,Yes
+mab1,heavy,partial,NA,G1F,50776,Yes,Yes
+mab1,light,full,NA,No,23695,NA,NA
+mab1,light,full,NA,G2,25318,NA,NA
+mab1,light,full,NA,G2S1 (NGNA),25626,NA,NA
+mab1,light,partial,NA,No,23691,NA,NA
+mab1,light,partial,NA,G2,25314,NA,NA
+mab1,light,partial,NA,G2S1 (NGNA),25622,NA,NA
