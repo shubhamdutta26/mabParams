@@ -2,7 +2,11 @@
 
 export("%>%")
 export(calculate_mass)
+export(mab_clearance)
+export(mab_comp)
 export(mab_params)
+export(mab_viscosity)
 export(parse_chem_formula)
 importFrom(magrittr,"%>%")
 importFrom(rlang,":=")
+importFrom(rlang,.data)

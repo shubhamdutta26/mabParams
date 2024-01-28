@@ -3,6 +3,7 @@ calculate_hc_mass <- function (seq,
                                clipped = FALSE,
                                chem_mod = NA,
                                n_hc_disulphides = 4L,
+                               glycans,
                                mab) {
   # hc_seq = "QVTLKESGPGILQPSQTLSLTCSFSGFSLRTSGMGVGWIRQPSGKGLEWLAHIWWDDDKRYNPALKSRLTISKDTSSNQVFLKIASVDTADTATYYCAQINPAWFAYWGQGTLVTVSSASTKGPSVFPLAPSSRSTSESTAALGCLVKDYFPEPVTVSWNSGSLTSGVHTFPAVLQSSGLYSLSSVVTVPSSSLGTQTYVCNVNHKPSNTKVDKRVEIKTCGGGSKPPTCPPCPAPELLGGPSVFLFPPKPKDTLMISRTPEVTCVVVDVSQEDPDVKFNWYVNGAEVHHAQTKPRETQYNSTYRVVSVLTVTHQDWLNGKEYTCKVSNKALPAPIQKTISKDKGQPREPQVYTLPPSREELTKNQVSLTCLVKGFYPSDIVVEWESSGQPENTYKTTPPVLDSDGSYFLYSKLTVDKSRWQQGNVFSCSVMHEALHNHYTQKSLSVSPGK"
   # lc_seq = "DIVLTQSPASLAVSLGQRATISCKASQSVDFDGDSFMNWYQQKPGQPPKLLIYTTSNLESGIPARFSASGSGTDFTLNIHPVEEEDTATYYCQQSNEDPYTFGGGTKLELKRAVAAPSVFIFPPSEDQVKSGTVSVVCLLNNFYPREASVKWKVDGVLKTGNSQESVTEQDSKDNTYSLSSTLTLSSTDYQSHNVYACEVTHQGLSSPVTKSFNRGEC"
@@ -13,19 +14,20 @@ calculate_hc_mass <- function (seq,
   # clipped = TRUE
 
   # Read data-------------------------------------------------------------------
-  element_composition <- readr::read_csv("inst/extdata/element_composition.csv",
-                                         col_types = "ciiiii",
-                                         col_names = TRUE)
-  glycans <- readr::read_csv("inst/extdata/glycans.csv",
-                             col_types = "ciiiiicc",
-                             col_names = TRUE)
-  element_symbol <- readr::read_csv("inst/extdata/element_symbols.csv",
-                             col_types = "cc",
-                             col_names = TRUE)
+  # element_composition <- readr::read_csv("inst/extdata/element_composition.csv",
+  #                                        col_types = "ciiiii",
+  #                                        col_names = TRUE)
+  # glycans <- readr::read_csv("inst/extdata/glycans.csv",
+  #                            col_types = "ciiiiicc",
+  #                            col_names = TRUE)
+  # element_symbol <- readr::read_csv("inst/extdata/element_symbols.csv",
+  #                            col_types = "cc",
+  #                            col_names = TRUE)
 
   # Check sequence and generate tibble with atomic composition------------------
   check_input(seq)
-  check_boolean_args(cyclized, clipped)
+  boolean_args <- list(cyclized, clipped)
+  purrr::map(boolean_args, check_boolean_args)
   hc_three <- to_aa_three_letter(seq)
   hc_base <- c(hc_three, "water")
   hc_base_count_table <- count_molecules(hc_base)

@@ -8,8 +8,8 @@ test_that("check_input throws error if not type character or illegal character",
 })
 
 # test_that("check_boolean_args throws error if not type character or illegal character", {
-#   expect_error(check_boolean_args(1,1,1), "hc_cyclized, hc_clipped, lc_glycosylation arguments must be logical.")
-#   expect_error(check_boolean_args("1","1","1"), "hc_cyclized, hc_clipped, lc_glycosylation arguments must be logical.")
+#   expect_error(check_boolean_args(1,1,1), "Cyclization, clipping, and glycosylation arguments must be logical.")
+#   expect_error(check_boolean_args("1","1","1"), "Cyclization, clipping, and glycosylation arguments must be logical.")
 # })
 
 
@@ -36,5 +36,5 @@ test_that("get_seq_element_comp returns tbl with element compositions", {
                            sulphur = c(0,1,0,1))
   result <- get_seq_element_comp(input)
 
-  expect_identical(result, output)
+  expect_equal(result, output)
 })

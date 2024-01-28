@@ -15,7 +15,8 @@ Imports:
     stringr,
     tibble,
     purrr,
-    rlang
+    rlang,
+    Peptides
 Depends:
     magrittr,
     R (>= 2.10)

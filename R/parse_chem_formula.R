@@ -25,8 +25,6 @@ parse_chem_formula <- function(formula) {
   counts[counts == ""] <- "1"
   counts <- as.numeric(counts)
 
-  # Construct dataframe
-  df <- tibble::tibble(element = elements, count = counts)
-
-  return(df)
+  # Construct and return dataframe
+  return(tibble::tibble(element = elements, count = counts))
 }

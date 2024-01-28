@@ -2,18 +2,19 @@ calculate_lc_mass <- function (seq,
                                glycosylation = FALSE,
                                chem_mod = NA,
                                n_lc_disulphides = 2L,
+                               glycans,
                                mab) {
 
   # Read data-------------------------------------------------------------------
-  element_composition <- readr::read_csv("inst/extdata/element_composition.csv",
-                                         col_types = "ciiiii",
-                                         col_names = TRUE)
-  glycans <- readr::read_csv("inst/extdata/glycans.csv",
-                             col_types = "ciiiiicc",
-                             col_names = TRUE)
-  element_symbol <- readr::read_csv("inst/extdata/element_symbols.csv",
-                                    col_types = "cc",
-                                    col_names = TRUE)
+  # element_composition <- readr::read_csv("inst/extdata/element_composition.csv",
+  #                                        col_types = "ciiiii",
+  #                                        col_names = TRUE)
+  # glycans <- readr::read_csv("inst/extdata/glycans.csv",
+  #                            col_types = "ciiiiicc",
+  #                            col_names = TRUE)
+  # element_symbol <- readr::read_csv("inst/extdata/element_symbols.csv",
+  #                                   col_types = "cc",
+  #                                   col_names = TRUE)
 
   # seq = "DIVLTQSPASLAVSLGQRATISCKASQSVDFDGDSFMNWYQQKPGQPPKLLIYTTSNLESGIPARFSASGSGTDFTLNIHPVEEEDTATYYCQQSNEDPYTFGGGTKLELKRAVAAPSVFIFPPSEDQVKSGTVSVVCLLNNFYPREASVKWKVDGVLKTGNSQESVTEQDSKDNTYSLSSTLTLSSTDYQSHNVYACEVTHQGLSSPVTKSFNRGEC"
   # Check sequence and generate tibble with atomic composition------------------

@@ -79,7 +79,7 @@ test_that("mab_params throws error if not args are not valid input", {
   expect_error(mab_params("MRXM"), "Input contains:X; Only one letter amino acid codes should be in the input without spaces.")
   expect_error(mab_params("MRX M"), "Input contains:X,  ; Only one letter amino acid codes should be in the input without spaces.")
   expect_error(mab_params("MR}X M"), "Input contains:}, X,  ; Only one letter amino acid codes should be in the input without spaces.")
-  expect_error(mab_params("MRGM", "MRGM", 1,1,1), "hc_cyclized, hc_clipped, lc_glycosylation arguments must be logical.")
+  expect_error(mab_params("MRGM", "MRGM", 1,1,1), "Cyclization, clipping, and glycosylation arguments must be logical.")
   expect_error(mab_params("MRGM", "MRGM", hc_chem_mod = 1), "The chemical modifications needs to be a character vector of length 1.")
   expect_error(mab_params("MRGM", "MRGM", lc_chem_mod = 1), "The chemical modifications needs to be a character vector of length 1.")
   expect_error(mab_params("MRGM", "MRGM", hc_chem_mod = 1, lc_chem_mod = 1), "The chemical modifications needs to be a character vector of length 1.")

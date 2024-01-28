@@ -15,35 +15,45 @@ mab_params(
   n_disulphides = 16L,
   n_hc_disulphides = 4L,
   n_lc_disulphides = 2L,
+  glycans = NA,
   mab = "mab1"
 )
 }
 \arguments{
-\item{hc_seq}{A string with hc amino acids}
+\item{hc_seq}{A string containing heavy chain amino acids (one letter code)}
 
-\item{lc_seq}{A string with lc amino acids}
+\item{lc_seq}{A string containing light chain amino acids (one letter code)}
 
-\item{hc_cyclized}{A boolean}
+\item{hc_cyclized}{A boolean value for heavy chain cyclization}
 
-\item{hc_clipped}{A boolean}
+\item{hc_clipped}{A boolean value for heavy chain clipping}
 
-\item{lc_glycosylation}{A boolean}
+\item{lc_glycosylation}{A boolean value for light chain glycosylation}
 
-\item{hc_chem_mod}{A string}
+\item{hc_chem_mod}{A character vector of chemical formula of length 1}
 
-\item{lc_chem_mod}{A string}
+\item{lc_chem_mod}{A character vector of chemical formula of length 1}
 
 \item{n_disulphides}{Number of total disulphides}
 
-\item{n_hc_disulphides}{Number of total HC disulphides}
+\item{n_hc_disulphides}{Number of total heavy chain disulphides}
 
-\item{n_lc_disulphides}{Number of total LC disulphides}
+\item{n_lc_disulphides}{Number of total light chain disulphides}
 
-\item{mab}{Name of mab; default is mab1}
+\item{glycans}{A csv file that contains glycan parameters}
+
+\item{mab}{Name of the antibody; default is "mab1"}
 }
 \value{
-vector
+A dataframe/ tibble with antibody mass parameters
 }
 \description{
 Calculate mass parameters of monoclonal antibodies
+}
+\examples{
+heavy <- "EVQLVESGGGLVQPGGSLRLSCAASGFNIKDTYIHWVRQAPGKGLEWVARIYPTNGYTRYA"
+light <- "DIQMTQSPSSLSASVGDRVTITCRASQDVNTAVAWYQQKPGKAPKLLIYSASFLYSGVPSR"
+glycans_path <- system.file("extdata", "glycans.csv", package = "mabParams")
+params_tbl <- mab_params(heavy, light, glycans = glycans_path)
+head(params_tbl)
 }

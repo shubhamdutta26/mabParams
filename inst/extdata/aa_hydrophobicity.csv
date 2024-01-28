@@ -1,0 +1,21 @@
+﻿aa,aa_three,consensus,norm_consensus,hydrophobic
+Arginine,arg,-1.76,-2.53,no
+Lysine,lys,-1.1,-1.5,no
+Aspartic acid,asp,-0.72,-0.9,no
+Glutamine,gln,-0.69,-0.85,no
+Asparagine,asn,-0.64,-0.78,no
+Glutamic acid,glu,-0.62,-0.74,no
+Histidine,his,-0.4,-0.4,no
+Serine,ser,-0.26,-0.18,no
+Threonine,thr,-0.18,-0.05,no
+Proline,pro,-0.07,0.12,yes
+Tyrosine,tyr,0.02,0.26,yes
+Cysteine,cys,0.04,0.29,yes
+Glycine,gly,0.16,0.48,no
+Alanine,ala,0.25,0.62,yes
+Methionine,met,0.26,0.64,no
+Tryptophan,trp,0.37,0.81,yes
+Leucine,leu,0.53,1.06,yes
+Valine,val,0.54,1.08,yes
+Phenylalanine,phe,0.61,1.19,yes
+Isoleucine,ile,0.73,1.38,yes

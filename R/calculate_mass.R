@@ -21,6 +21,5 @@ calculate_mass <- function (seq) {
     dplyr::select(-n) %>%
     dplyr::select(2:ncol(.)) %>%
     dplyr::summarise(dplyr::across(dplyr::everything(), ~ sum(.x, na.rm = TRUE)))
-  return(paste(round(calculate_mass_from_elements_tbl(seq_elements_tibble),
-                     digits = 2), "Da", sep = " "))
+  return(round(calculate_mass_from_elements_tbl(seq_elements_tibble), digits = 2))
 }

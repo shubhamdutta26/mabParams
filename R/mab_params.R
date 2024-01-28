@@ -1,20 +1,26 @@
 #' Calculate mass parameters of monoclonal antibodies
 #'
-#' @param hc_seq A string with hc amino acids
-#' @param lc_seq A string with lc amino acids
-#' @param hc_cyclized A boolean
-#' @param hc_clipped A boolean
-#' @param lc_glycosylation A boolean
-#' @param hc_chem_mod A string
-#' @param lc_chem_mod A string
+#' @param hc_seq A string containing heavy chain amino acids (one letter code)
+#' @param lc_seq A string containing light chain amino acids (one letter code)
+#' @param hc_cyclized A boolean value for heavy chain cyclization
+#' @param hc_clipped A boolean value for heavy chain clipping
+#' @param lc_glycosylation A boolean value for light chain glycosylation
+#' @param hc_chem_mod A character vector of chemical formula of length 1
+#' @param lc_chem_mod A character vector of chemical formula of length 1
 #' @param n_disulphides Number of total disulphides
-#' @param n_hc_disulphides Number of total HC disulphides
-#' @param n_lc_disulphides Number of total LC disulphides
-#' @param mab Name of mab; default is mab1
-#' @return vector
+#' @param n_hc_disulphides Number of total heavy chain disulphides
+#' @param n_lc_disulphides Number of total light chain disulphides
+#' @param glycans A csv file that contains glycan parameters
+#' @param mab Name of the antibody; default is "mab1"
+#' @return A dataframe/ tibble with antibody mass parameters
 #' @export
 #'
 #' @examples
+#' heavy <- "EVQLVESGGGLVQPGGSLRLSCAASGFNIKDTYIHWVRQAPGKGLEWVARIYPTNGYTRYA"
+#' light <- "DIQMTQSPSSLSASVGDRVTITCRASQDVNTAVAWYQQKPGKAPKLLIYSASFLYSGVPSR"
+#' glycans_path <- system.file("extdata", "glycans.csv", package = "mabParams")
+#' params_tbl <- mab_params(heavy, light, glycans = glycans_path)
+#' head(params_tbl)
 mab_params <- function (hc_seq,
                         lc_seq,
                         hc_cyclized = FALSE,
@@ -25,18 +31,31 @@ mab_params <- function (hc_seq,
                         n_disulphides = 16L,
                         n_hc_disulphides = 4L,
                         n_lc_disulphides = 2L,
+                        glycans = NA,
                         mab = "mab1") {
 
   # Check chemical mod arg
   check_chem_mod_args(hc_chem_mod, lc_chem_mod)
 
+  # Glycan input
+  if (is.na(glycans)) {
+    glycans_path <- system.file("extdata", "glycans.csv", package = "mabParams")
+    glycans <- readr::read_csv(glycans_path,
+                               col_types = "ciiiiicc",
+                               col_names = TRUE)
+  } else {
+    glycans <- readr::read_csv(glycans,
+                               col_types = "ciiiiicc",
+                               col_names = TRUE)
+  }
+
   # HC MASS CALCULATION---------------------------------------------------------
   hc_mass_params <- calculate_hc_mass(hc_seq, hc_cyclized, hc_clipped,
-                                      hc_chem_mod, n_hc_disulphides, mab)
+                                      hc_chem_mod, n_hc_disulphides, glycans, mab)
 
   # LC MASS CALCULATION---------------------------------------------------------
   lc_mass_params <- calculate_lc_mass(lc_seq, lc_glycosylation, lc_chem_mod,
-                                      n_lc_disulphides, mab)
+                                      n_lc_disulphides, glycans, mab)
 
   # INTACT MASS NO GLYCOFORMS---------------------------------------------------
   hc_three_1 <- to_aa_three_letter(hc_seq)
@@ -84,19 +103,15 @@ mab_params <- function (hc_seq,
                   glycans = "No", .before = 1)
 
   # INTACT MASS WITH GLYCOFORMS-------------------------------------------------
-  element_composition <- readr::read_csv("inst/extdata/element_composition.csv",
-                                         col_types = "ciiiii",
-                                         col_names = TRUE)
-
-  glycans_1 <- readr::read_csv("inst/extdata/glycans.csv",
-                             col_types = "ciiiiicc",
-                             col_names = TRUE)
-  hc <- glycans_1 %>%
+  # element_composition <- readr::read_csv("inst/extdata/element_composition.csv",
+  #                                        col_types = "ciiiii",
+  #                                        col_names = TRUE)
+  hc <- glycans %>%
     dplyr::filter(show_hc == "Y") %>%
     dplyr::select(-c(show_hc, show_lc))
 
 
-  lc_1 <- glycans_1 %>%
+  lc_1 <- glycans %>%
     dplyr::filter(show_lc == "Y") %>%
     dplyr::select(-c(show_hc, show_lc))
 
