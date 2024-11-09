@@ -54,8 +54,6 @@ check_input <- function(one_letter_input) {
   invisible(NULL)
 }
 
-#' @keywords internal
-#'
 #' Check Boolean Arguments
 #'
 #' @description
@@ -63,13 +61,12 @@ check_input <- function(one_letter_input) {
 #' are boolean values (TRUE/FALSE). Provides specific error messages for any
 #' non-boolean arguments.
 #'
-#' @param cyclization A logical value indicating whether cyclization is enabled
-#' @param clipping A logical value indicating whether clipping is enabled
+#' @param cyclized A logical value indicating whether cyclization is enabled
+#' @param clipped A logical value indicating whether clipping is enabled
 #' @param glycosylation A logical value indicating whether glycosylation is enabled
 #'
 #' @return Nothing. Called for side effects.
-#' @throws error if any argument is not boolean
-#' @noexport
+#' @keywords internal
 check_boolean_args <- function(cyclized = NULL, clipped = NULL, glycosylation = NULL) {
   # Create named list of arguments for checking
   args_to_check <- list(
@@ -139,10 +136,6 @@ to_aa_three_letter <- function(one_letter_input) {
 #'     \item molecule: The unique molecule values
 #'     \item n: Count of how many times each molecule appears
 #'   }
-#'
-#' @examples
-#' molecules <- c("ATP", "GTP", "ATP", "CTP")
-#' count_molecules(molecules)
 #'
 #' @keywords internal
 count_molecules <- function(molecule) {

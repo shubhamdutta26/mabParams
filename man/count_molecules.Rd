@@ -20,9 +20,4 @@ A tibble with two columns:
 Creates a tibble containing counts of how many times each unique molecule appears
 in the input vector.
 }
-\examples{
-molecules <- c("ATP", "GTP", "ATP", "CTP")
-count_molecules(molecules)
-
-}
 \keyword{internal}

@@ -12,7 +12,6 @@ Imports:
     readr,
     tidyr,
     dplyr,
-    stringr,
     tibble,
     purrr,
     rlang
