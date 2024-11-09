@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 # mabParams
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/shubhamdutta26/mabParams/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/shubhamdutta26/mabParams/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/shubhamdutta26/mabParams/graph/badge.svg)](https://app.codecov.io/gh/shubhamdutta26/mabParams)
 <!-- badges: end -->
 
 The goal of mabParams is to ...
@@ -38,18 +40,4 @@ library(mabParams)
 ## basic example code
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+To be updated...
