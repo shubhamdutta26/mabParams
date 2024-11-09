@@ -1,10 +1,16 @@
 test_that("calculate_mass throws error if not type character or illegal character", {
-  expect_error(calculate_mass(1), "HC/ LC sequence input needs to be a character vector of length 1")
-  expect_error(calculate_mass(TRUE), "HC/ LC sequence input needs to be a character vector of length 1")
-  expect_error(calculate_mass(c("MRGM", "MGRM")), "HC/ LC sequence input needs to be a character vector of length 1")
-  expect_error(calculate_mass("MRXM"), "Input contains:X; Only one letter amino acid codes should be in the input without spaces.")
-  expect_error(calculate_mass("MRX M"), "Input contains:X,  ; Only one letter amino acid codes should be in the input without spaces.")
-  expect_error(calculate_mass("MR}X M"), "Input contains:}, X,  ; Only one letter amino acid codes should be in the input without spaces.")
+  expect_error(calculate_mass(1),
+               regexp = "chain sequence inputs must be a single")
+  expect_error(calculate_mass(TRUE),
+               regexp = "chain sequence inputs must be a single")
+  expect_error(calculate_mass(c("MRGM", "MGRM")),
+               regexp = "chain sequence inputs must be a single")
+  expect_error(calculate_mass("MRXM"),
+               regexp = "Invalid character found in input sequence")
+  expect_error(calculate_mass("MRX M"),
+               regexp = "Sequence contains spaces")
+  expect_error(calculate_mass("MR}XM"),
+               regexp = "Invalid character found in input sequence")
 })
 
 test_that("calculate_mass prints accurate reduced peptide masses daltons", {

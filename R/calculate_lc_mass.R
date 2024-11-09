@@ -19,7 +19,7 @@ calculate_lc_mass <- function (seq,
   # seq = "DIVLTQSPASLAVSLGQRATISCKASQSVDFDGDSFMNWYQQKPGQPPKLLIYTTSNLESGIPARFSASGSGTDFTLNIHPVEEEDTATYYCQQSNEDPYTFGGGTKLELKRAVAAPSVFIFPPSEDQVKSGTVSVVCLLNNFYPREASVKWKVDGVLKTGNSQESVTEQDSKDNTYSLSSTLTLSSTDYQSHNVYACEVTHQGLSSPVTKSFNRGEC"
   # Check sequence and generate tibble with atomic composition------------------
   check_input(seq)
-  check_boolean_args(glycosylation)
+  check_boolean_args(glycosylation = glycosylation)
   lc_three <- to_aa_three_letter(seq)
   lc_base <- c(lc_three, "water")
   lc_base_count_table <- count_molecules(lc_base)

@@ -26,8 +26,7 @@ calculate_hc_mass <- function (seq,
 
   # Check sequence and generate tibble with atomic composition------------------
   check_input(seq)
-  boolean_args <- list(cyclized, clipped)
-  purrr::map(boolean_args, check_boolean_args)
+  check_boolean_args(cyclized = cyclized, clipped = clipped)
   hc_three <- to_aa_three_letter(seq)
   hc_base <- c(hc_three, "water")
   hc_base_count_table <- count_molecules(hc_base)
@@ -66,6 +65,33 @@ calculate_hc_mass <- function (seq,
   }
 
   # Cyclization and clipping calculations of HC full reduced MW-----------------
+  # ChatGPT code: works
+  # col_name_cyclized <- if (cyclized) {
+  #   paste0("Pyro", ifelse(hc_first_aa == "gln", "Q", "E"))
+  # } else {
+  #   "cyclized"
+  # }
+  #
+  # # Define the molecule filter based on conditions
+  # if (cyclized) {
+  #   molecule_filter <- if (clipped) {
+  #     if (hc_first_aa == "gln") c("lys", "nh3") else c("lys", "water")
+  #   } else {
+  #     if (hc_first_aa == "gln") "nh3" else "water"
+  #   }
+  # } else {
+  #   molecule_filter <- if (clipped) "lys" else NULL
+  # }
+  #
+  # # Filter and bind rows
+  # cli_cyc_tbl <- hc_mod_elements_tibble %>%
+  #   dplyr::bind_rows(
+  #     tibble::tibble(
+  #       element_composition %>% dplyr::filter(molecule %in% molecule_filter),
+  #       n = -1L
+  #     )
+  #   )
+
   hc_first_aa <- hc_three[1]
   hc_last_aa <- hc_three[length(hc_three)]
   if (cyclized == TRUE) {
@@ -134,6 +160,37 @@ calculate_hc_mass <- function (seq,
                   modifications = chem_mod, glycans = "No", .before = 1)
 
   # Calculations for partially reduced HC---------------------------------------
+  # ChatGPT code: works
+  # if (cyclized) {
+  #   molecule_filter <- if (hc_first_aa == "gln") {
+  #     if (clipped) c("lys", "nh3") else "nh3"
+  #   } else {
+  #     if (clipped) c("lys", "water") else NULL
+  #   }
+  # } else {
+  #   molecule_filter <- if (clipped) "lys" else NULL
+  # }
+  #
+  # # Create partial_red_tbl
+  # partial_red_tbl <- hc_mod_elements_tibble %>%
+  #   dplyr::bind_rows(
+  #     tibble::tibble(
+  #       element_composition %>% dplyr::filter(molecule %in% molecule_filter),
+  #       n = -1L
+  #     )
+  #   )
+  #
+  # # Add rows for hydrogen if necessary
+  # if (!is.null(molecule_filter) || !clipped) {
+  #   partial_red_tbl <- partial_red_tbl %>%
+  #     dplyr::bind_rows(
+  #       tibble::tibble(
+  #         element_composition %>% dplyr::filter(molecule == "hydrogen"),
+  #         n = -(2L * n_hc_disulphides)
+  #       )
+  #     )
+  # }
+
   if (cyclized == TRUE & clipped == TRUE) {
     if (hc_first_aa == "gln") {
       partial_red_tbl <- hc_mod_elements_tibble %>%

@@ -73,13 +73,20 @@ test_that("mab_params calculates correct masses for all TRUE and both chemical m
 
 # Errors
 test_that("mab_params throws error if not args are not valid input", {
-  expect_error(mab_params(1,1), "HC/ LC sequence input needs to be a character vector of length 1")
-  expect_error(mab_params(TRUE, FALSE), "HC/ LC sequence input needs to be a character vector of length 1")
-  expect_error(mab_params(c("MRGM", "MGRM")), "HC/ LC sequence input needs to be a character vector of length 1")
-  expect_error(mab_params("MRXM"), "Input contains:X; Only one letter amino acid codes should be in the input without spaces.")
-  expect_error(mab_params("MRX M"), "Input contains:X,  ; Only one letter amino acid codes should be in the input without spaces.")
-  expect_error(mab_params("MR}X M"), "Input contains:}, X,  ; Only one letter amino acid codes should be in the input without spaces.")
-  expect_error(mab_params("MRGM", "MRGM", 1,1,1), "Cyclization, clipping, and glycosylation arguments must be logical.")
+  expect_error(mab_params(1,1),
+               regexp = "chain sequence inputs must be a single")
+  expect_error(mab_params(TRUE, FALSE),
+               regexp = "chain sequence inputs must be a single")
+  expect_error(mab_params(c("MRGM", "MGRM")),
+               regexp = "chain sequence inputs must be a single")
+  expect_error(mab_params("MRXM"),
+               regexp = "Invalid character found in input sequence")
+  expect_error(mab_params("MRX M"),
+               regexp = "Sequence contains spaces")
+  expect_error(mab_params("MR}XM"),
+               regexp = "Invalid character found in input sequence")
+  expect_error(mab_params("MRGM", "MRGM", 1,1,1),
+               regexp = "must be logical")
   expect_error(mab_params("MRGM", "MRGM", hc_chem_mod = 1), "The chemical modifications needs to be a character vector of length 1.")
   expect_error(mab_params("MRGM", "MRGM", lc_chem_mod = 1), "The chemical modifications needs to be a character vector of length 1.")
   expect_error(mab_params("MRGM", "MRGM", hc_chem_mod = 1, lc_chem_mod = 1), "The chemical modifications needs to be a character vector of length 1.")

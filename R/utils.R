@@ -1,28 +1,184 @@
-# Create named vector for amino acids
+#' Standard one-letter amino acid codes
+#' @keywords internal
 # aa_one_letter <- c("A", "R", "N", "D", "C", "Q", "E", "G", "H", "I",
 #                    "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V")
 
-# Check validity of HC/LC input
-check_input <- function (one_letter_input) {
-
-  if (typeof (one_letter_input) != "character" || length(one_letter_input) != 1) {
-    stop("HC/ LC sequence input needs to be a character vector of length 1", call. = FALSE)
+#' @keywords internal
+#'
+#' Internal function to validate antibody HC/LC sequence input
+#'
+#' Validates whether the input sequence for antibody heavy chain (HC) or light chain (LC)
+#' is in the correct format and contains only valid one-letter amino acid codes.
+#'
+#' @param one_letter_input A character string containing the amino acid sequence
+#' @return NULL invisibly. Raises an error if validation fails
+check_input <- function(one_letter_input) {
+  # Input type and length validation
+  if (!is.character(one_letter_input) || length(one_letter_input) != 1) {
+    rlang::abort(
+      "Heavy and light chain sequence inputs must be a single character string each.",
+      call = NULL
+    )
   }
 
-  split_aa <- toupper(as.character(stringr::str_split(one_letter_input, pattern = "", simplify = TRUE)))
+  # Check for spaces first
+  if (grepl("\\s", one_letter_input)) {
+    rlang::abort(
+      "Sequence contains spaces. Please remove all spaces from the input.",
+      call = NULL
+    )
+  }
 
-  indexes = !(split_aa %in% aa_one_letter)
+  # Convert to uppercase and split into individual characters
+  # Fix: Using strsplit instead of str_split to ensure proper character vector
+  split_aa <- strsplit(toupper(one_letter_input), "")[[1]]
 
-  if (sum(indexes) >= 1) {
-    x <- stringr::str_flatten_comma(split_aa[indexes == TRUE])
-    stop(paste0("Input contains:", x, "; Only one letter amino acid codes should be in the input without spaces."), call. = FALSE)
+  # Check for invalid amino acids using the standard aa_one_letter vector
+  invalid_aa <- split_aa[!split_aa %in% aa_one_letter]
+
+  if (length(invalid_aa) > 0) {
+    invalid_list <- paste(invalid_aa, collapse = ", ")
+    rlang::abort(
+      c(
+        "Invalid character found in input sequence.",
+        "x" = sprintf(
+          "Invalid amino acid: %s",
+          invalid_list
+        ),
+        "i" = "Only standard one-letter amino acid codes (A,R,N,D,C,Q,E,G,H,I,L,K,M,F,P,S,T,W,Y,V) are allowed."
+      ),
+      call = NULL
+    )
+  }
+
+  invisible(NULL)
+}
+
+#' @keywords internal
+#'
+#' Check Boolean Arguments
+#'
+#' @description
+#' Validates that specified arguments (Cyclization, clipping, and glycosylation)
+#' are boolean values (TRUE/FALSE). Provides specific error messages for any
+#' non-boolean arguments.
+#'
+#' @param cyclization A logical value indicating whether cyclization is enabled
+#' @param clipping A logical value indicating whether clipping is enabled
+#' @param glycosylation A logical value indicating whether glycosylation is enabled
+#'
+#' @return Nothing. Called for side effects.
+#' @throws error if any argument is not boolean
+#' @noexport
+check_boolean_args <- function(cyclized = NULL, clipped = NULL, glycosylation = NULL) {
+  # Create named list of arguments for checking
+  args_to_check <- list(
+    cyclized = cyclized,
+    clipped = clipped,
+    glycosylation = glycosylation
+  )
+
+  # Check each non-NULL argument and collect non-boolean ones
+  invalid_args <- names(args_to_check)[sapply(args_to_check, function(x) {
+    !is.null(x) && !is.logical(x)
+  })]
+
+  # If any invalid arguments found, construct and throw error message
+  if (length(invalid_args) > 0) {
+    error_msg <- sprintf(
+      "The following argument(s) must be logical (TRUE/FALSE): %s",
+      paste(invalid_args, collapse = ", ")
+    )
+    rlang::abort(error_msg, call = NULL)
   }
 }
 
-check_boolean_args <- function(argument) {
-  if (typeof(argument) != "logical"){
-    stop(paste0("Cyclization, clipping, and glycosylation arguments must be logical."))
-  }
+#' Convert One-Letter to Three-Letter Amino Acid Codes
+#'
+#' @description
+#' Converts amino acid sequences from one-letter codes to their corresponding
+#' three-letter codes. Handles both uppercase and lowercase inputs.
+#'
+#' @param one_letter_input A character string containing one-letter amino acid codes
+#'   (e.g., "ACGT" or "acgt")
+#'
+#' @return A character vector of three-letter amino acid codes
+#'
+#' @details
+#' The function accepts a string of one-letter amino acid codes and converts each
+#' letter to its corresponding three-letter code. It is case-insensitive and will
+#' handle both upper and lowercase inputs. Invalid amino acid codes will result in
+#' an error.
+#'
+#' @examples
+#' \dontrun{
+#' to_aa_three_letter("ACD")  # Returns c("ala", "cys", "asp")
+#' to_aa_three_letter("acd")  # Same result
+#' }
+#'
+#' @keywords internal
+to_aa_three_letter <- function(one_letter_input) {
+
+  # Split string into individual characters and convert to uppercase
+  aa_chars <- strsplit(one_letter_input, "")[[1]] |>
+    toupper()
+  # Convert to three-letter codes
+  unname(aa_named[aa_chars])
+}
+
+#' Count occurrences of each unique molecule
+#'
+#' @description
+#' Creates a tibble containing counts of how many times each unique molecule appears
+#' in the input vector.
+#'
+#' @param molecule A vector containing molecule identifiers
+#'
+#' @return A tibble with two columns:
+#'   \itemize{
+#'     \item molecule: The unique molecule values
+#'     \item n: Count of how many times each molecule appears
+#'   }
+#'
+#' @examples
+#' molecules <- c("ATP", "GTP", "ATP", "CTP")
+#' count_molecules(molecules)
+#'
+#' @keywords internal
+count_molecules <- function(molecule) {
+  tibble::as_tibble(table(molecule))
+}
+
+#' Get elemental composition for specified molecules
+#'
+#' Internal function that retrieves the elemental composition data for a given
+#' set of molecules from the element_composition dataset.
+#'
+#' @param seq Character vector of molecule names to look up
+#'   \itemize{
+#'     \item molecule: Character. Name of the molecule
+#'     \item carbon: Integer. Number of carbon atoms
+#'     \item hydrogen: Integer. Number of hydrogen atoms
+#'     \item nitrogen: Integer. Number of nitrogen atoms
+#'     \item oxygen: Integer. Number of oxygen atoms
+#'     \item sulphur: Integer. Number of sulfur atoms
+#'   }
+#'
+#' @return A data frame containing rows from element_composition matching the
+#'   input molecules
+#'
+#' @keywords internal
+#'
+#' @examples
+#' \dontrun{
+#' # Get composition for multiple molecules
+#' get_seq_element_comp(c("ala", "gly", "ser"))
+#'
+#' # Get composition for a single molecule
+#' get_seq_element_comp("water")
+#' }
+get_seq_element_comp <- function(seq) {
+  element_composition[element_composition$molecule %in% seq, ]
 }
 
 check_chem_mod_args <- function(hc_chem_mod = NA, lc_chem_mod = NA) {
@@ -30,7 +186,7 @@ check_chem_mod_args <- function(hc_chem_mod = NA, lc_chem_mod = NA) {
     if (typeof(hc_chem_mod) != "character" || length(hc_chem_mod) > 1) {
       stop("The chemical modifications needs to be a character vector of length 1.", call. = FALSE)
     }
-    if (grepl("^[0-9]$", substr(hc_chem_mod, 1, 1)) == TRUE || grepl("[^a-zA-Z0-9]", hc_chem_mod) == TRUE ) {
+    if (grepl("^[0-9]$", substr(hc_chem_mod, 1, 1)) == TRUE || grepl("[^a-zA-Z0-9]", hc_chem_mod) == TRUE) {
       stop("The chemical modifications cannot begin with a number or contain special characters.", call. = FALSE)
     }
   }
@@ -38,108 +194,57 @@ check_chem_mod_args <- function(hc_chem_mod = NA, lc_chem_mod = NA) {
     if (typeof(lc_chem_mod) != "character" || length(lc_chem_mod) > 1) {
       stop("The chemical modifications needs to be a character vector of length 1.", call. = FALSE)
     }
-    if (grepl("^[0-9]$", substr(lc_chem_mod, 1, 1)) == TRUE || grepl("[^a-zA-Z0-9]", lc_chem_mod) == TRUE ) {
+    if (grepl("^[0-9]$", substr(lc_chem_mod, 1, 1)) == TRUE || grepl("[^a-zA-Z0-9]", lc_chem_mod) == TRUE) {
       stop("The chemical modifications cannot begin with a number or contain special characters.", call. = FALSE)
     }
   }
 }
 
-# Create named vector for amino acids
-# aa_named <- c(A = "ala", R = "arg", N = "asn", D = "asp", C = "cys",
-#               Q = "gln", E = "glu", G = "gly", H = "his", I = "ile",
-#               L = "leu", K = "lys", M = "met", F = "phe", P = "pro",
-#               S = "ser", T = "thr", W = "trp", Y = "tyr", V = "val")
-
-# Convert HC and LC to three letter codes
-to_aa_three_letter <- function (one_letter_input) {
-  toupper(stringr::str_split(one_letter_input, pattern = "", simplify = TRUE)) %>%
-    stringr::str_replace_all(aa_named)
-}
-
-# Count number of each molecule
-count_molecules <- function (molecule) {
-  tibble::as_tibble(table(molecule))
-}
-
-# Elemental composition of each molecule
-get_seq_element_comp <- function (seq) {
-
-  # element_composition <- tibble::tribble(
-  #   ~molecule,~carbon,~hydrogen,~nitrogen,~oxygen,~sulphur,
-  #   "carbon",1,0,0,0,0,
-  #   "hydrogen",0,1,0,0,0,
-  #   "nitrogen",0,0,1,0,0,
-  #   "oxygen",0,0,0,1,0,
-  #   "sulphur",0,0,0,0,1,
-  #   "water",0,2,0,1,0,
-  #   "nh3",0,3,1,0,0,
-  #   "ala",3,5,1,1,0,
-  #   "arg",6,12,4,1,0,
-  #   "asn",4,6,2,2,0,
-  #   "asp",4,5,1,3,0,
-  #   "cys",3,5,1,1,1, # reduced with SH
-  #   "glu",5,7,1,3,0,
-  #   "gln",5,8,2,2,0,
-  #   "gly",2,3,1,1,0,
-  #   "his",6,7,3,1,0,
-  #   "ile",6,11,1,1,0,
-  #   "leu",6,11,1,1,0,
-  #   "lys",6,12,2,1,0,
-  #   "met",5,9,1,1,1,
-  #   "phe",9,9,1,1,0,
-  #   "pro",5,7,1,1,0,
-  #   "ser",3,5,1,2,0,
-  #   "thr",4,7,1,2,0,
-  #   "trp",11,10,2,1,0,
-  #   "tyr",9,9,1,2,0,
-  #   "val",5,9,1,1,0,
-  #   "HexNAc",8,13,1,5,0,
-  #   "Hex",6,10,0,5,0,
-  #   "dHex",6,10,0,4,0,
-  #   "NeuAc",11,17,1,8,0,
-  #   "NeuGc",11,17,1,9,0,
-  # )
-
-
-  element_composition %>%
-    dplyr::filter(element_composition$molecule %in% seq)
-}
-
-# element_mass_list <- list(
-#   bromine=79.904,
-#   calcium=39.9625912,
-#   carbon=12.0107359,
-#   chlorine=35.4527,
-#   fluorine=18.9984,
-#   hydrogen=1.00794075,
-#   iodine=126.90447,
-#   lithium=6.941,
-#   nitrogen=14.00670321,
-#   oxygen=15.99940492,
-#   phosphorus=30.97376,
-#   potassium=39.0983,
-#   selenium=78.96,
-#   sodium=22.98977,
-#   sulphur=32.06478741
-# )
-
-calculate_mass_from_elements_tbl <- function (df) {
-  df %>%
-    dplyr::mutate(dplyr::across(dplyr::any_of(names(element_mass_list)),
-    ~.x * element_mass_list[[dplyr::cur_column()]])) %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(mass_full = sum(dplyr::c_across(dplyr::where(is.numeric)))) %>%
-    dplyr::pull("mass_full")
+#' Calculate Molecular Mass from Element Composition
+#'
+#' @description
+#' Takes a data frame containing element quantities and calculates the total molecular mass
+#' for each row by multiplying element quantities with their respective atomic masses
+#' and summing the results.
+#'
+#' @param df A data frame where column names match element names (e.g., "carbon", "hydrogen")
+#'           and values represent the number of atoms of each element
+#'
+#' @return A numeric vector containing the calculated molecular mass for each row
+#'
+#' @details
+#' The function uses a predefined `element_mass_list` containing atomic masses for elements.
+#' Only columns matching element names in this list are used in calculations.
+#' Non-matching columns are ignored. Missing values (NA) are treated as 0 in the sum.
+#'
+#' @examples
+#' \dontrun{
+#' compounds <- data.frame(
+#'   carbon = c(1, 2),
+#'   hydrogen = c(4, 6),
+#'   oxygen = c(1, 1)
+#' )
+#' calculate_mass_from_elements_tbl(compounds)
+#' }
+#'
+#' @keywords internal
+calculate_mass_from_elements_tbl <- function(df) {
+  # Multiply each column by the corresponding element mass
+  element_cols <- intersect(names(df), names(element_mass_list))
+  # Apply the element mass multiplication
+  df[element_cols] <- lapply(element_cols, function(col) {
+    df[[col]] * element_mass_list[[col]]
+  })
+  # Calculate row-wise mass sum across numeric columns
+  df$mass_full <- rowSums(df[sapply(df, is.numeric)], na.rm = TRUE)
+  # Return the calculated mass
+  df$mass_full
 }
 
 combine_and_sum <- function(df1, df2, char_col, num_cols, suffix_1, suffix_2) {
-  # Create all combinations of the 'char' column
   comb <- expand.grid(df1[[char_col]], df2[[char_col]])
-
-  # Name the columns
   names(comb) <- c(paste0(char_col, suffix_1), paste0(char_col, suffix_2))
 
-  # Loop over the numeric columns
   for (num_col in num_cols) {
     comb[[paste0(num_col, suffix_1)]] <- df1[[num_col]][match(comb[[paste0(char_col, suffix_1)]], df1[[char_col]])]
     comb[[paste0(num_col, suffix_2)]] <- df2[[num_col]][match(comb[[paste0(char_col, suffix_2)]], df2[[char_col]])]
@@ -147,16 +252,4 @@ combine_and_sum <- function(df1, df2, char_col, num_cols, suffix_1, suffix_2) {
   }
 
   return(comb)
-}
-
-calc_hydrophobicity <- function(seq) {
-  # https://www.sciencedirect.com/science/article/abs/pii/0022283684903097?fr=RR-2&ref=pdf_download&rr=84c215f36a7b4d19
-  # aa_hydrophobic <- readr::read_csv(file = "inst/extdata/aa_hydrophobicity.csv",
-  #                                   col_types = "ccnnc")
-  tbl <- count_molecules(to_aa_three_letter(seq)) %>%
-    dplyr::rowwise() %>%
-    dplyr::full_join(aa_hydrophobic, by = dplyr::join_by(molecule == aa_three)) %>%
-    dplyr::mutate(product = n * norm_consensus)
-  hi <- -(sum(subset(tbl, hydrophobic == "yes")$product, na.rm = TRUE)/sum(subset(tbl, hydrophobic == "no")$product, na.rm = TRUE))
-  return(hi)
 }
