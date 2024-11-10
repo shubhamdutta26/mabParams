@@ -87,7 +87,10 @@ test_that("mab_params throws error if not args are not valid input", {
                regexp = "Invalid character found in input sequence")
   expect_error(mab_params("MRGM", "MRGM", 1,1,1),
                regexp = "must be logical")
-  expect_error(mab_params("MRGM", "MRGM", hc_chem_mod = 1), "The chemical modifications needs to be a character vector of length 1.")
-  expect_error(mab_params("MRGM", "MRGM", lc_chem_mod = 1), "The chemical modifications needs to be a character vector of length 1.")
-  expect_error(mab_params("MRGM", "MRGM", hc_chem_mod = 1, lc_chem_mod = 1), "The chemical modifications needs to be a character vector of length 1.")
+  expect_error(mab_params("MRGM", "MRGM", hc_chem_mod = 1),
+               "The heavy chain chemical modification needs to be a single character string.")
+  expect_error(mab_params("MRGM", "MRGM", lc_chem_mod = 1),
+               "The light chain chemical modification needs to be a single character string.")
+  expect_error(mab_params("MRGM", "MRGM", hc_chem_mod = 1, lc_chem_mod = 1),
+               "The heavy chain chemical modification needs to be a single character string.")
 })

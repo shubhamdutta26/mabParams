@@ -1,8 +1,3 @@
-#' Standard one-letter amino acid codes
-#' @keywords internal
-# aa_one_letter <- c("A", "R", "N", "D", "C", "Q", "E", "G", "H", "I",
-#                    "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V")
-
 #' @keywords internal
 #'
 #' Internal function to validate antibody HC/LC sequence input
@@ -13,8 +8,7 @@
 #' @param one_letter_input A character string containing the amino acid sequence
 #' @return NULL invisibly. Raises an error if validation fails
 check_input <- function(one_letter_input) {
-  # Input type and length validation
-  if (!is.character(one_letter_input) || length(one_letter_input) != 1) {
+  if (!is.character(one_letter_input) || length(one_letter_input) != 1 || is.null(one_letter_input) || one_letter_input == "") {
     rlang::abort(
       "Heavy and light chain sequence inputs must be a single character string each.",
       call = NULL
@@ -174,23 +168,43 @@ get_seq_element_comp <- function(seq) {
   element_composition[element_composition$molecule %in% seq, ]
 }
 
+#' Validate Chemical Modification Arguments
+#'
+#' @description
+#' Internal function to validate the format of chemical modification strings for
+#' heavy and light chains.
+#'
+#' @keywords internal
+#'
+#' @param hc_chem_mod Character string or NA. Chemical modification for heavy chain.
+#' @param lc_chem_mod Character string or NA. Chemical modification for light chain.
+#'
+#' @return None. Raises an error if validation fails.
 check_chem_mod_args <- function(hc_chem_mod = NA, lc_chem_mod = NA) {
-  if (!is.na(hc_chem_mod)) {
-    if (typeof(hc_chem_mod) != "character" || length(hc_chem_mod) > 1) {
-      stop("The chemical modifications needs to be a character vector of length 1.", call. = FALSE)
+  # Helper function to validate a single modification
+  validate_mod <- function(mod, chain_type) {
+    if (is.na(mod)) return(NULL)
+
+    if (!is.character(mod) || length(mod) != 1) {
+      rlang::abort(
+        sprintf("The %s chain chemical modification needs to be a single character string.",
+                chain_type),
+        call = NULL
+      )
     }
-    if (grepl("^[0-9]$", substr(hc_chem_mod, 1, 1)) == TRUE || grepl("[^a-zA-Z0-9]", hc_chem_mod) == TRUE) {
-      stop("The chemical modifications cannot begin with a number or contain special characters.", call. = FALSE)
+
+    if (grepl("^\\d|[^a-zA-Z0-9]", mod)) {
+      rlang::abort(
+        sprintf("The %s chain chemical modification cannot begin with a number or contain special characters.",
+                chain_type),
+        call = NULL
+      )
     }
   }
-  if (!is.na(lc_chem_mod)) {
-    if (typeof(lc_chem_mod) != "character" || length(lc_chem_mod) > 1) {
-      stop("The chemical modifications needs to be a character vector of length 1.", call. = FALSE)
-    }
-    if (grepl("^[0-9]$", substr(lc_chem_mod, 1, 1)) == TRUE || grepl("[^a-zA-Z0-9]", lc_chem_mod) == TRUE) {
-      stop("The chemical modifications cannot begin with a number or contain special characters.", call. = FALSE)
-    }
-  }
+
+  # Validate both chains
+  validate_mod(hc_chem_mod, "heavy")
+  validate_mod(lc_chem_mod, "light")
 }
 
 #' Calculate Molecular Mass from Element Composition

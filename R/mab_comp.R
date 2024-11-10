@@ -1,75 +1,75 @@
-#' mab_comp returns a tibble with the amino acid compositions of intact
-#' monoclonal antibody (cys residues are reduced). Charges on each amino
-#' acid is assigned based on pI of the antibody
+#' Calculate Amino Acid Composition of Monoclonal Antibody Sequences
 #'
-#' @param hc_seq A string containing heavy chain amino acids (one letter code)
-#' @param lc_seq A string containing light chain amino acids (one letter code)
+#' @description
+#' Analyzes the amino acid composition of heavy and light chain sequences of a monoclonal
+#' antibody (MAb). For individual chains, counts represent single chain composition.
+#' For both chains combined, counts are doubled to represent the complete antibody
+#' (2 heavy + 2 light chains).
 #'
-#' @return A tibble with amino acid compositions
-#' @export
+#' @param hc_seq Character string of single-letter amino acid codes for heavy chain
+#' @param lc_seq Character string of single-letter amino acid codes for light chain
+#'
+#' @return A tibble with columns:
+#' \describe{
+#'   \item{chain}{Character indicating "both", "heavy", or "light" chain}
+#'   \item{amino_acid}{Three-letter amino acid code}
+#'   \item{n}{Count of amino acid occurrences (doubled only for "both" to represent complete antibody)}
+#'   \item{aa_percent}{Percentage of each amino acid (rounded to 2 decimal places)}
+#'   \item{polarity}{Amino acid polarity classification}
+#'   \item{net_charge_7.4}{Net charge at pH 7.4}
+#' }
+#'
+#' @importFrom dplyr mutate rename bind_rows left_join select
+#' @importFrom tibble tribble
 #'
 #' @examples
-#' heavy <- "EVQLVESGGGLVQPGGSLRLSCAASGFNIKDTYIHWVRQAPGKGLEWVARIYPTNGYTRYA"
-#' light <- "DIQMTQSPSSLSASVGDRVTITCRASQDVNTAVAWYQQKPGKAPKLLIYSASFLYSGVPSR"
-#' comp_tbl <- mab_comp(heavy, light)
-#' head(comp_tbl)
-mab_comp <- function (hc_seq, lc_seq) {
-  purrr::map(list(hc_seq, lc_seq), check_input)
+#' hc <- "QVQLVQSGAEVKKPGASVKVSCKASGYTFT"
+#' lc <- "DIQMTQSPSSLSASVGDRVTITCRASQ"
+#' mab_comp(hc, lc)
+#'
+#' @export
+mab_comp <- function(hc_seq, lc_seq) {
+  # Input validation
+  check_input(hc_seq)
+  check_input(lc_seq)
+
+  # Convert to three-letter codes
   hc <- to_aa_three_letter(hc_seq)
   lc <- to_aa_three_letter(lc_seq)
-  hc_count <- count_molecules(hc)%>%
-    dplyr::mutate(chain = "heavy", .before = 1) %>%
-    dplyr::rename(amino_acid = "molecule") %>%
-    dplyr::mutate(n = n*2,
-                  aa_percent = round(n/sum(n), 2),
-                  aa_type = dplyr::case_match(
-                    amino_acid,
-                    c("ala","cys","gly","ser","thr") ~ "tiny",
-                    c("ala","cys","asp","gly","asn","pro","ser","thr","val") ~ "small",
-                    c("ala","ile","leu","val") ~ "aliphatic",
-                    c("phe","his","trp","tyr") ~ "aromatic",
-                    c("ala","cys","phe","gly","ile","leu","met","pro","val","trp","tyr") ~ "non-polar",
-                    c("asp","glu","his","lys","asn","gln","arg","ser","thr") ~ "polar",
-                    c("asp","glu","his","lys","arg") ~ "charged",
-                    c("his","lys","arg") ~ "basic",
-                    c("asp","glu") ~ "acidic"
-                  ))
 
-  lc_count <- count_molecules(lc)%>%
-    dplyr::mutate(chain = "light", .before = 1) %>%
-    dplyr::rename(amino_acid = "molecule") %>%
-    dplyr::mutate(n = n*2,
-                  aa_percent = round(n/sum(n), 2),
-                  aa_type = dplyr::case_match(
-                    amino_acid,
-                    c("ala","cys","gly","ser","thr") ~ "tiny",
-                    c("ala","cys","asp","gly","asn","pro","ser","thr","val") ~ "small",
-                    c("ala","ile","leu","val") ~ "aliphatic",
-                    c("phe","his","trp","tyr") ~ "aromatic",
-                    c("ala","cys","phe","gly","ile","leu","met","pro","val","trp","tyr") ~ "non-polar",
-                    c("asp","glu","his","lys","asn","gln","arg","ser","thr") ~ "polar",
-                    c("asp","glu","his","lys","arg") ~ "charged",
-                    c("his","lys","arg") ~ "basic",
-                    c("asp","glu") ~ "acidic"
-                  ))
+  # Helper function to process counts
+  process_counts <- function(seq, chain_name, double_counts = FALSE) {
+    counts <- count_molecules(seq) %>%
+      dplyr::mutate(
+        chain = chain_name,
+        .before = 1
+      ) %>%
+      dplyr::rename(amino_acid = "molecule")
 
-  all_count <- count_molecules(c(hc, lc))%>%
-    dplyr::mutate(chain = "both", .before = 1) %>%
-    dplyr::rename(amino_acid = "molecule") %>%
-    dplyr::mutate(n = n*2,
-                  aa_percent = round(n/sum(n), 2),
-                  aa_type = dplyr::case_match(
-                    amino_acid,
-                    c("ala","cys","gly","ser","thr") ~ "tiny",
-                    c("ala","cys","asp","gly","asn","pro","ser","thr","val") ~ "small",
-                    c("ala","ile","leu","val") ~ "aliphatic",
-                    c("phe","his","trp","tyr") ~ "aromatic",
-                    c("ala","cys","phe","gly","ile","leu","met","pro","val","trp","tyr") ~ "non-polar",
-                    c("asp","glu","his","lys","asn","gln","arg","ser","thr") ~ "polar",
-                    c("asp","glu","his","lys","arg") ~ "charged",
-                    c("his","lys","arg") ~ "basic",
-                    c("asp","glu") ~ "acidic"
-                  ))
+    # Only double counts for complete antibody (both chains)
+    if(double_counts) {
+      counts <- counts %>% dplyr::mutate(n = n * 2)
+    }
 
-  return(dplyr::bind_rows(all_count, hc_count, lc_count))
+    counts %>%
+      dplyr::mutate(
+        aa_percent = round(n/sum(n), 3)
+      ) %>%
+      # Join with aa_type table for properties
+      dplyr::left_join(
+        aa_type %>%
+          dplyr::rename(amino_acid = aa),
+        by = "amino_acid"
+      )
+  }
+
+  # Process individual chains without doubling
+  hc_count <- process_counts(hc, "heavy", double_counts = FALSE)
+  lc_count <- process_counts(lc, "light", double_counts = FALSE)
+
+  # Process both chains together with doubling
+  all_count <- process_counts(c(hc, lc), "both", double_counts = TRUE)
+
+  # Combine results
+  dplyr::bind_rows(all_count, hc_count, lc_count)
 }
